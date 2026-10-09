@@ -1,0 +1,8 @@
+node_modules
+.npm-cache
+dist
+release
+test-results
+api-reference.yaml
+package-lock.json
+tests/e2e/subjects.json

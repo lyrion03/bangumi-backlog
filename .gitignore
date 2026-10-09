@@ -1,0 +1,15 @@
+node_modules/
+dist/
+release/
+test-results/
+playwright-report/
+*.local
+.npm-cache/
+
+# Local verification artifacts and private configuration
+qa/
+original-checksums.json
+.env
+.env.*
+
+/docs/DEVELOPMENT.md

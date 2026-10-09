@@ -1,0 +1,23 @@
+{
+  "name": "bangumi-backlog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "bangumi动画补标工具",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "release": "npm run test && npm run build && node scripts/release.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "fflate": "^0.8.2",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^3.2.4"
+  }
+}
