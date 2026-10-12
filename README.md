@@ -8,7 +8,7 @@
 
 ## 下载与启动
 
-1. 下载 Release 的 **Assets** 中的 `bangumi-backlog-v1.1.0.zip` 并完整解压，请勿下载 Source code。
+1. 下载 Release 的 **Assets** 中的 `bangumi-backlog-v1.1.1.zip` 并完整解压，请勿下载 Source code。
 2. 安装 [Node.js](https://nodejs.org/zh-cn/download)（22.12+ 或 24 LTS，已安装可跳过）。
 3. Windows 双击 **`START-WINDOWS.cmd`**；macOS / Linux 在解压目录运行 `node serve.mjs`。
 4. 浏览器打开 **http://127.0.0.1:4173**，使用期间保持启动窗口开启。

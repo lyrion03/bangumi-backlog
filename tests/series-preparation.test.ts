@@ -228,3 +228,33 @@ it('probe-only pages persist direct hints but do not fetch details or episodes',
   expect(cache.confirmedHint('public', 1)).not.toBe(true);
   expect(cache.series('public', 1)).toBeUndefined();
 });
+
+it('runs three probes/roots concurrently with a strict page-wide probe barrier', async () => {
+  const api = new Api(0),
+    cache = new SeriesCache(memory());
+  const gates: Array<() => void> = [];
+  const events: string[] = [];
+  vi.spyOn(api, 'related').mockImplementation(async (id) => {
+    events.push('probe:' + id);
+    if (id <= 3) await new Promise<void>((r) => gates.push(r));
+    return id <= 3 ? [{ id: id + 10, type: 2, relation: '续集' }] : [];
+  });
+  const subjectsSpy = vi.spyOn(api, 'subject').mockImplementation(async (id) => {
+    events.push('detail:' + id);
+    return { ...subject(id), platform: '剧场版' };
+  });
+  const running = prepareSeriesPage(api, cache, 'public', [1, 2, 3].map(subject), {
+    ...controls(),
+    concurrency: 3,
+  });
+  await vi.waitFor(() => expect(gates).toHaveLength(3));
+  expect(subjectsSpy).not.toHaveBeenCalled();
+  // Further traversal shares resolved relationships in the real Api; this stub releases those reads immediately.
+  vi.mocked(api.related).mockImplementation(async (id) =>
+    id <= 3 ? [{ id: id + 10, type: 2, relation: '续集' }] : [],
+  );
+  gates.forEach((r) => r());
+  await running;
+  expect(events.slice(0, 3)).toEqual(['probe:1', 'probe:2', 'probe:3']);
+  for (const id of [1, 2, 3]) expect(cache.series('public', id)?.entries).toHaveLength(2);
+});

@@ -1129,6 +1129,12 @@ for (const size of [10, 20]) {
       await page.addInitScript(() => sessionStorage.setItem('bbm-token', 'fixture-token'));
       const events: string[] = [];
       const offsets: number[] = [];
+      const canceledOffsets: number[] = [];
+      page.on('requestfailed', (req) => {
+        const u = new URL(req.url());
+        if (u.pathname === '/v0/subjects')
+          canceledOffsets.push(Number(u.searchParams.get('offset')));
+      });
       let releaseProbe!: () => void;
       const probe = new Promise<void>((resolve) => {
         releaseProbe = resolve;
@@ -1188,6 +1194,7 @@ for (const size of [10, 20]) {
       expect(events.indexOf('catalog:100')).toBeGreaterThan(events.indexOf('related:999888'));
       await page.locator('.anime-card').first().locator('.series-spotlight').click();
       await expect(page.locator('.series-row')).toHaveCount(2);
+      await expect.poll(() => canceledOffsets).toContain(100);
       releaseNext();
       await page.getByRole('button', { name: '关闭弹窗', exact: true }).click();
       await expect(page.locator('#series-scan-status')).toHaveText(
@@ -1196,16 +1203,16 @@ for (const size of [10, 20]) {
           timeout: 20000,
         },
       );
-      expect(offsets).toEqual([0, 100]);
+      expect(offsets).toEqual([0, 100, 100]);
       await page.getByRole('button', { name: '下一页', exact: true }).click();
       await expect(page.locator('.anime-card')).toHaveCount(size);
       await expect(page.locator('.anime-card').first()).toHaveAttribute('data-id', '20100');
-      expect(offsets.filter((n) => n === 100)).toHaveLength(1);
+      expect(offsets.filter((n) => n === 100)).toHaveLength(2);
     },
   );
 }
 
-test('changing NSFW filters stops the obsolete catalog scan after its in-flight chunk', async ({
+test('changing NSFW filters aborts the obsolete catalog scan and refetches only for the new filter', async ({
   page,
 }) => {
   await mock(page);
@@ -1215,6 +1222,10 @@ test('changing NSFW filters stops the obsolete catalog scan after its in-flight 
     release = resolve;
   });
   const offsets: number[] = [];
+  let canceled = 0;
+  page.on('requestfailed', (req) => {
+    if (new URL(req.url()).pathname === '/v0/subjects') canceled++;
+  });
   await page.route('https://api.bgm.tv/v0/subjects?**', async (route) => {
     offsets.push(Number(new URL(route.request().url()).searchParams.get('offset')));
     await gate;
@@ -1239,7 +1250,8 @@ test('changing NSFW filters stops the obsolete catalog scan after its in-flight 
   release();
   await expect(page.locator('.anime-card')).toHaveCount(20);
   await expect(page.locator('#sort option[value="heat"]')).toHaveText('热度优先');
-  expect(offsets).toEqual([0]);
+  await expect.poll(() => canceled).toBe(1);
+  expect(offsets).toEqual([0, 0]);
 });
 
 test('headline and date priority are available with NSFW hidden and remain ordered across pages', async ({
@@ -1572,4 +1584,90 @@ test('movie series skip duration checks and rediscover obsolete negative caches'
   }
   await page.reload();
   await expect(page.locator('.series-spotlight')).toHaveCount(2);
+});
+
+test('dismissing the last unmarked card waits for its replacement before auto-next', async ({
+  page,
+}) => {
+  await mock(page);
+  const data = Array.from({ length: 30 }, (_, i) => ({
+    ...subjects[0],
+    id: 70000 + i,
+    date: '2020-01-01',
+  }));
+  await page.addInitScript(
+    (data) =>
+      localStorage.setItem(
+        'bangumi-batch-marker-v1',
+        JSON.stringify({
+          version: 1,
+          preferencesVersion: 2,
+          items: Object.fromEntries(
+            data.slice(0, 9).map((s) => [s.id, { ...s, status: 'collect', dirty: false }]),
+          ),
+          settings: { realtime: false, autoNext: false },
+        }),
+      ),
+    data,
+  );
+  await page.route('https://api.bgm.tv/v0/search/subjects?**', (route) => {
+    const offset = Number(new URL(route.request().url()).searchParams.get('offset'));
+    return route.fulfill({ json: { data: data.slice(offset, offset + 20), total: 30 } });
+  });
+  await page.route('https://api.bgm.tv/v0/subjects/*/subjects', (route) =>
+    route.fulfill({ json: [] }),
+  );
+  await page.goto('/');
+  await page.locator('#page-size').selectOption('10');
+  await expect(page.locator('.anime-card')).toHaveCount(10);
+  await page.locator('#auto-next').check();
+  await page.locator('[data-action="dismiss"][data-id="70009"]').click();
+  await expect(page.locator('.anime-card').last()).toHaveAttribute('data-id', '70010');
+  await expect(page.locator('#pager')).toContainText('第 1 / 3 页');
+  await page.waitForTimeout(800);
+  await expect(page.locator('.anime-card').first()).toHaveAttribute('data-id', '70000');
+  await page.locator('[data-action="mark"][data-id="70010"][data-status="collect"]').click();
+  await expect(page.locator('#pager')).toContainText('第 2 / 3 页');
+  await expect(page.locator('.anime-card').first()).toHaveAttribute('data-id', '70011');
+});
+test('changing pages aborts old probes and prioritizes the new page over unfinished prefetch', async ({
+  page,
+}) => {
+  await mock(page);
+  const data = Array.from({ length: 40 }, (_, i) => ({
+    ...subjects[0],
+    id: 71000 + i,
+    date: '2020-01-01',
+    platform: '剧场版',
+  }));
+  const started: number[] = [];
+  const aborted: number[] = [];
+  let release = () => {};
+  const held = new Promise<void>((r) => (release = r));
+  page.on('requestfailed', (req) => {
+    const match = new URL(req.url()).pathname.match(/^\/v0\/subjects\/(\d+)\/subjects$/);
+    if (match) aborted.push(Number(match[1]));
+  });
+  await page.route('https://api.bgm.tv/v0/search/subjects?**', (route) => {
+    const offset = Number(new URL(route.request().url()).searchParams.get('offset'));
+    return route.fulfill({ json: { data: data.slice(offset, offset + 20), total: 40 } });
+  });
+  await page.route('https://api.bgm.tv/v0/subjects/*/subjects', async (route) => {
+    const id = Number(new URL(route.request().url()).pathname.split('/')[3]);
+    started.push(id);
+    if (id < 71020) await held;
+    await route.fulfill({ json: [] }).catch(() => {});
+  });
+  await page.goto('/');
+  await expect(page.locator('.anime-card')).toHaveCount(20);
+  await expect.poll(() => started.filter((id) => id < 71020).length).toBe(3);
+  await page.getByRole('button', { name: '下一页', exact: true }).click();
+  await expect(page.locator('.anime-card').first()).toHaveAttribute('data-id', '71020');
+  await expect.poll(() => started.some((id) => id >= 71020)).toBe(true);
+  await expect.poll(() => aborted.filter((id) => id < 71020).length).toBe(3);
+  expect(started.filter((id) => id < 71020)).toHaveLength(3);
+  release();
+  await expect(page.locator('#series-scan-status')).toContainText('系列准备完成', {
+    timeout: 15000,
+  });
 });

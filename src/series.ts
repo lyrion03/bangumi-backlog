@@ -1,3 +1,4 @@
+import { concurrent } from './concurrent';
 import { Api } from './api';
 import { type Subject } from './domain';
 const RELATIONS = new Set(['续集', '前传', '前集', '后续']);
@@ -31,7 +32,7 @@ export const isSeriesRelation = (
   rootId: number,
 ) => relation.id !== rootId && relation.type === 2 && RELATIONS.has(relation.relation);
 
-/** Probe direct animation relationships one subject at a time, in display order. */
+/** Probe direct animation relationships with bounded concurrency, starting in display order. */
 export async function scanSeriesPage(
   api: Api,
   subjects: Subject[],
@@ -44,16 +45,18 @@ export async function scanSeriesPage(
     setHint: (id: number, hint: boolean) => void;
   },
   priority = 1,
+  signal?: AbortSignal,
+  concurrency = 1,
 ) {
   let done = 0;
   let failed = 0;
-  for (const subject of subjects) {
+  await concurrent(subjects, concurrency, async (subject) => {
     await waitUntilReady();
     if (cancelled()) return;
     try {
       let found = cache?.getHint(subject.id);
       if (found === undefined) {
-        const relations = await api.related(subject.id, priority);
+        const relations = await api.related(subject.id, priority, ...(signal ? [signal] : []));
         if (cancelled()) return;
         found = relations.some((r) => isSeriesRelation(r, subject.id));
         cache?.setHint(subject.id, found);
@@ -64,7 +67,7 @@ export async function scanSeriesPage(
       failed++;
     }
     onProgress(++done, failed);
-  }
+  });
 }
 
 export async function collectSeries(
@@ -74,6 +77,7 @@ export async function collectSeries(
   onProgress: (count: number) => void,
   waitUntilReady: () => Promise<void> = async () => {},
   priority = 1,
+  signal?: AbortSignal,
 ) {
   const seen = new Set([root.id]);
   const queue = [root.id];
@@ -84,12 +88,15 @@ export async function collectSeries(
     const id = queue.shift()!;
     await waitUntilReady();
     if (cancelled()) break;
-    const subject = await api.subject(id, priority);
+    const subject = await api.subject(id, priority, ...(signal ? [signal] : []));
     // Excluded branches must not bridge the traversal into unrelated side stories.
     if (!MAINLINE_PLATFORMS.has(subject.platform)) continue;
     await waitUntilReady();
     if (cancelled()) break;
-    if (subject.platform !== '剧场版' && !hasMainlineLength(await api.episodes(id, priority)))
+    if (
+      subject.platform !== '剧场版' &&
+      !hasMainlineLength(await api.episodes(id, priority, ...(signal ? [signal] : [])))
+    )
       continue;
     if (cancelled()) break;
     entries.push(subject);
@@ -97,7 +104,7 @@ export async function collectSeries(
     if (cancelled()) break;
     await waitUntilReady();
     if (cancelled()) break;
-    const relations = await api.related(id, priority);
+    const relations = await api.related(id, priority, ...(signal ? [signal] : []));
     for (const r of relations) {
       if (!isSeriesRelation(r, id) || seen.has(r.id)) continue;
       if (seen.size >= cap) {

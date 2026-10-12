@@ -1,9 +1,12 @@
+import { concurrent } from './concurrent';
 import { Api } from './api';
 import { type Subject } from './domain';
 import { collectSeries, scanSeriesPage } from './series';
 import { SeriesCache } from './series-cache';
 export interface PreparationControls {
   priority?: number;
+  signal?: AbortSignal;
+  concurrency?: number;
   probeOnly?: boolean;
   cancelled: () => boolean;
   waitUntilReady: () => Promise<void>;
@@ -39,12 +42,14 @@ export async function prepareSeriesPage(
       setHint: (id, hint) => cache.putHint(scope, id, hint),
     },
     controls.priority ?? 1,
+    controls.signal,
+    controls.concurrency ?? 1,
   );
   if (cancelled()) return;
   const roots = subjects.filter((s) => related.has(s.id));
   if (controls.probeOnly) return { count: roots.length, failed: failures };
   let done = 0;
-  for (const root of roots) {
+  await concurrent(roots, controls.concurrency ?? 1, async (root) => {
     await waitUntilReady();
     if (cancelled()) return;
     if (!cache.series(scope, root.id)) {
@@ -56,6 +61,7 @@ export async function prepareSeriesPage(
           () => {},
           waitUntilReady,
           controls.priority ?? 1,
+          controls.signal,
         );
         if (cancelled()) return;
         if (!cache.series(scope, root.id)) cache.putSeries(scope, root.id, result);
@@ -69,7 +75,7 @@ export async function prepareSeriesPage(
     const prepared = cache.series(scope, root.id);
     if (prepared) onHint(root.id, prepared.entries.length > 1);
     onProgress('series', ++done, roots.length, failures);
-  }
+  });
   if (!roots.length) onProgress('series', 0, 0, failures);
   return { count: roots.length, failed: failures };
 }

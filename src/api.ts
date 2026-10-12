@@ -25,7 +25,19 @@ export interface Log {
   status: number;
   ms: number;
 }
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = (ms: number, signal?: AbortSignal) =>
+  new Promise<void>((resolve, reject) => {
+    signal?.throwIfAborted();
+    const abort = () => {
+      clearTimeout(timer);
+      reject(new DOMException('请求已取消', 'AbortError'));
+    };
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', abort);
+      resolve();
+    }, ms);
+    signal?.addEventListener('abort', abort, { once: true });
+  });
 export class Api {
   token = '';
   logs: Log[] = [];
@@ -39,14 +51,69 @@ export class Api {
   }> = [];
   private cooldownUntil = 0;
   private last = 0;
-  private details = new Map<number, { token: string; at: number; promise: Promise<Subject> }>();
+  private readCache = new Map<
+    string,
+    { expires: number; promise: Promise<any>; signal?: AbortSignal; done: boolean }
+  >();
+  private cached<T>(
+    key: string,
+    ttl: number,
+    priority: number,
+    signal: AbortSignal | undefined,
+    load: () => Promise<T>,
+  ): Promise<T> {
+    signal?.throwIfAborted();
+    const cacheKey = JSON.stringify([this.token, key]);
+    const hit = this.readCache.get(cacheKey);
+    if (
+      hit &&
+      hit.expires > Date.now() &&
+      (hit.done || (!hit.signal?.aborted && hit.signal === signal))
+    ) {
+      for (const task of this.requestWaiters)
+        if (
+          task.token === this.token &&
+          (task.path === key || task.path.startsWith(key + (key.includes('?') ? '&' : '?')))
+        )
+          task.priority = Math.max(task.priority, priority);
+      return hit.promise;
+    }
+    const entry = { expires: Date.now() + ttl, signal, done: false, promise: load() };
+    this.readCache.set(cacheKey, entry);
+    if (this.readCache.size > 600) this.readCache.delete(this.readCache.keys().next().value!);
+    void entry.promise.then(
+      () => {
+        entry.done = true;
+      },
+      () => {
+        if (this.readCache.get(cacheKey) === entry) this.readCache.delete(cacheKey);
+      },
+    );
+    return entry.promise;
+  }
   constructor(private gap = 350) {}
-  private async acquire(priority: number, path: string, token: string) {
+  private async acquire(priority: number, path: string, token: string, signal?: AbortSignal) {
+    signal?.throwIfAborted();
     if (this.activeRequests < 3) this.activeRequests++;
     else
-      await new Promise<void>((resume) =>
-        this.requestWaiters.push({ resume, priority, path, token }),
-      );
+      await new Promise<void>((resolve, reject) => {
+        const waiter = {
+          priority,
+          path,
+          token,
+          resume: () => {
+            signal?.removeEventListener('abort', abort);
+            resolve();
+          },
+        };
+        const abort = () => {
+          const i = this.requestWaiters.indexOf(waiter);
+          if (i >= 0) this.requestWaiters.splice(i, 1);
+          reject(new DOMException('请求已取消', 'AbortError'));
+        };
+        this.requestWaiters.push(waiter);
+        signal?.addEventListener('abort', abort, { once: true });
+      });
   }
   private release() {
     this.requestWaiters.sort((a, b) => b.priority - a.priority);
@@ -54,17 +121,13 @@ export class Api {
     if (next) next.resume();
     else this.activeRequests--;
   }
-  private promote(path: string, priority: number) {
-    for (const waiting of this.requestWaiters)
-      if (waiting.path === path && waiting.token === this.token)
-        waiting.priority = Math.max(waiting.priority, priority);
-  }
-  private startRequest() {
+  private startRequest(signal?: AbortSignal) {
     const turn = this.startQueue.then(async () => {
+      signal?.throwIfAborted();
       // Recheck after each sleep: another in-flight request may have received 429.
       let delay: number;
       while ((delay = Math.max(this.last + this.gap, this.cooldownUntil) - Date.now()) > 0)
-        await wait(delay);
+        await wait(delay, signal);
       this.last = Date.now();
     });
     this.startQueue = turn.catch(() => {});
@@ -83,7 +146,7 @@ export class Api {
     const run = async () => {
       for (let attempt = 0; attempt < 3; attempt++) {
         signal?.throwIfAborted();
-        await this.startRequest();
+        await this.startRequest(signal);
         signal?.throwIfAborted();
         const start = Date.now();
         const controller = new AbortController();
@@ -156,7 +219,7 @@ export class Api {
     };
     return (async () => {
       signal?.throwIfAborted();
-      await this.acquire(priority, path, token);
+      await this.acquire(priority, path, token, signal);
       try {
         signal?.throwIfAborted();
         return await run();
@@ -168,28 +231,31 @@ export class Api {
   me(token = this.token) {
     return this.request<User>('GET', '/v0/me', undefined, token);
   }
-  private candidatePages = new Map<string, { expires: number; promise: Promise<Page<unknown>> }>();
-  private candidatePage(method: string, path: string, body: unknown, priority: number) {
-    const token = this.token;
-    const key = JSON.stringify([token, method, path, body]);
-    const cached = this.candidatePages.get(key);
-    if (cached && cached.expires > Date.now()) {
-      this.promote(path, priority);
-      return cached.promise;
-    }
-    const promise = this.request<Page<unknown>>(method, path, body, token, priority).then(
-      (page) => {
+  private candidatePage(
+    method: string,
+    path: string,
+    body: unknown,
+    priority: number,
+    signal?: AbortSignal,
+  ) {
+    return this.cached<Page<unknown>>(
+      JSON.stringify([method, path, body]),
+      5 * 60000,
+      priority,
+      signal,
+      async () => {
+        const page = await this.request<Page<unknown>>(
+          method,
+          path,
+          body,
+          this.token,
+          priority,
+          ...(signal ? [signal] : []),
+        );
         if (!page || !Array.isArray(page.data)) throw new ApiError('候选接口返回格式不受支持');
         return page;
       },
     );
-    this.candidatePages.set(key, { expires: Date.now() + 5 * 60 * 1000, promise });
-    if (this.candidatePages.size > 80)
-      this.candidatePages.delete(this.candidatePages.keys().next().value!);
-    void promise.catch(() => {
-      if (this.candidatePages.get(key)?.promise === promise) this.candidatePages.delete(key);
-    });
-    return promise;
   }
   private async filteredCandidatePage(
     f: SearchFilters,
@@ -197,6 +263,7 @@ export class Api {
     sort: string,
     filter: Record<string, unknown>,
     priority: number,
+    signal?: AbortSignal,
   ): Promise<Page<Subject>> {
     if (f.nsfw === 'only' && !this.token)
       throw new ApiError('仅 NSFW 需要先在同步中心验证令牌并连接 Bangumi。');
@@ -216,6 +283,7 @@ export class Api {
             (season ? '&year=' + f.quarterYear : ''),
       !catalog ? { keyword, sort, filter } : undefined,
       priority,
+      signal,
     );
     const total = !catalog ? Math.min(page.total || 0, 1000) : page.total || 0;
     return {
@@ -241,7 +309,7 @@ export class Api {
         ),
     };
   }
-  async search(f: SearchFilters, priority = 1) {
+  async search(f: SearchFilters, priority = 1, signal?: AbortSignal) {
     const keyword = f.keyword.trim();
     const sort =
       f.sort === 'rank' || f.sort === 'date' || f.sort === 'heat' || (f.sort === 'match' && keyword)
@@ -264,6 +332,7 @@ export class Api {
         undefined,
         this.token,
         priority,
+        ...(signal ? [signal] : []),
       );
       if (!page || !Array.isArray(page.data)) throw new ApiError('排行榜接口返回格式不受支持');
       return {
@@ -288,13 +357,14 @@ export class Api {
         ...(f.to ? [`<=${f.to}-12-31`] : []),
       ];
     if (f.nsfw === 'only' || sort === 'date')
-      return this.filteredCandidatePage(f, keyword, sort, filter, priority);
+      return this.filteredCandidatePage(f, keyword, sort, filter, priority, signal);
     const page = await this.request<Page<unknown>>(
       'POST',
       `/v0/search/subjects?limit=${f.size}&offset=${(f.page - 1) * f.size}`,
       { keyword, sort, filter },
       this.token,
       priority,
+      ...(signal ? [signal] : []),
     );
     if (!page || !Array.isArray(page.data)) throw new ApiError('搜索接口返回格式不受支持');
     const data = page.data
@@ -305,67 +375,36 @@ export class Api {
       data: sort === 'rank' ? data.filter((s) => s.rank > 0).sort((a, b) => a.rank - b.rank) : data,
     };
   }
-  subject(id: number, priority = 1) {
-    const path = `/v0/subjects/${id}`;
-    const cached = this.details.get(id);
-    if (cached && cached.token === this.token && Date.now() - cached.at < 15 * 60 * 1000) {
-      this.promote(path, priority);
-      return cached.promise;
-    }
-    const entry = {
-      token: this.token,
-      at: Date.now(),
-      promise: this.request('GET', path, undefined, this.token, priority).then(normalize),
-    };
-    this.details.set(id, entry);
-    if (this.details.size > 600) this.details.delete(this.details.keys().next().value!);
-    void entry.promise.catch(() => {
-      if (this.details.get(id) === entry) this.details.delete(id);
-    });
-    return entry.promise;
-  }
-  private relatedCache = new Map<
-    number,
-    {
-      token: string;
-      expires: number;
-      value: Promise<Array<{ id: number; type: number; relation: string }>>;
-    }
-  >();
-  related(id: number, priority = 1) {
-    const cached = this.relatedCache.get(id);
-    if (cached && cached.token === this.token && cached.expires > Date.now()) {
-      this.promote(`/v0/subjects/${id}/subjects`, priority);
-      return cached.value;
-    }
-    const entry = {
-      token: this.token,
-      expires: Date.now() + 15 * 60 * 1000,
-      value: this.loadRelated(id, priority),
-    };
-    this.relatedCache.set(id, entry);
-    if (this.relatedCache.size > 300)
-      this.relatedCache.delete(this.relatedCache.keys().next().value!);
-    entry.value.catch(() => {
-      if (this.relatedCache.get(id) === entry) this.relatedCache.delete(id);
-    });
-    return entry.value;
-  }
-  private async loadRelated(id: number, priority: number) {
-    const list = await this.fetchRelated(id, priority);
-    if (!Array.isArray(list)) throw new ApiError('系列接口返回格式不受支持');
-    return list;
-  }
-  private fetchRelated(id: number, priority: number) {
-    return this.request<Array<{ id: number; type: number; relation: string }>>(
-      'GET',
-      `/v0/subjects/${id}/subjects`,
-      undefined,
-      this.token,
-      priority,
+  subject(id: number, priority = 1, signal?: AbortSignal) {
+    const path = '/v0/subjects/' + id;
+    return this.cached<Subject>(path, 15 * 60000, priority, signal, () =>
+      this.request('GET', path, undefined, this.token, priority, ...(signal ? [signal] : [])).then(
+        normalize,
+      ),
     );
   }
-  characters(id: number, priority = 1) {
+  related(id: number, priority = 1, signal?: AbortSignal) {
+    const path = '/v0/subjects/' + id + '/subjects';
+    return this.cached<Array<{ id: number; type: number; relation: string }>>(
+      path,
+      15 * 60000,
+      priority,
+      signal,
+      async () => {
+        const list = await this.request<Array<{ id: number; type: number; relation: string }>>(
+          'GET',
+          path,
+          undefined,
+          this.token,
+          priority,
+          ...(signal ? [signal] : []),
+        );
+        if (!Array.isArray(list)) throw new ApiError('系列接口返回格式不受支持');
+        return list;
+      },
+    );
+  }
+  characters(id: number, priority = 1, signal?: AbortSignal) {
     return this.request<
       Array<{
         id: number;
@@ -373,9 +412,21 @@ export class Api {
         relation: string;
         images?: { medium?: string; grid?: string };
       }>
-    >('GET', `/v0/subjects/${id}/characters`, undefined, this.token, priority);
+    >(
+      'GET',
+      `/v0/subjects/${id}/characters`,
+      undefined,
+      this.token,
+      priority,
+      ...(signal ? [signal] : []),
+    );
   }
-  async pages<T>(path: string, priority = 1, token = this.token): Promise<T[]> {
+  async pages<T>(
+    path: string,
+    priority = 1,
+    token = this.token,
+    signal?: AbortSignal,
+  ): Promise<T[]> {
     const results: T[] = [];
     for (let offset = 0; ;) {
       const page = await this.request<Page<T>>(
@@ -384,6 +435,7 @@ export class Api {
         undefined,
         token,
         priority,
+        ...(signal ? [signal] : []),
       );
       if (!page || !Array.isArray(page.data)) throw new ApiError('分页接口返回格式不受支持');
       results.push(...page.data);
@@ -392,32 +444,18 @@ export class Api {
       if (offset >= 10000) throw new ApiError('条目章节数超过处理上限，未写入章节进度');
     }
   }
-  private episodeCache = new Map<
-    number,
-    { token: string; at: number; promise: Promise<Episode[]> }
-  >();
-  episodes(id: number, priority = 1) {
-    const cached = this.episodeCache.get(id);
-    if (cached && cached.token === this.token && Date.now() - cached.at < 15 * 60 * 1000) {
-      for (const queued of this.requestWaiters)
-        if (queued.token === this.token && queued.path.startsWith(`/v0/episodes?subject_id=${id}&`))
-          queued.priority = Math.max(queued.priority, priority);
-      return cached.promise;
-    }
-    const promise = this.pages<Episode>(`/v0/episodes?subject_id=${id}`, priority);
-    const entry = { token: this.token, at: Date.now(), promise };
-    this.episodeCache.set(id, entry);
-    if (this.episodeCache.size > 150)
-      this.episodeCache.delete(this.episodeCache.keys().next().value!);
-    promise.catch(() => {
-      if (this.episodeCache.get(id) === entry) this.episodeCache.delete(id);
-    });
-    return promise;
+  episodes(id: number, priority = 1, signal?: AbortSignal) {
+    const path = '/v0/episodes?subject_id=' + id;
+    return this.cached<Episode[]>(path, 15 * 60000, priority, signal, () =>
+      this.pages<Episode>(path, priority, this.token, signal),
+    );
   }
-  episodeCollections(id: number, priority = 1) {
+  episodeCollections(id: number, priority = 1, signal?: AbortSignal) {
     return this.pages<{ episode: Episode; type: number; updated_at?: number }>(
       `/v0/users/-/collections/${id}/episodes`,
       priority,
+      this.token,
+      signal,
     );
   }
   collections(username: string, offset: number) {

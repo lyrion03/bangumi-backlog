@@ -201,3 +201,76 @@ it('canceled queued radar work never reaches the network and does not delay a pr
   await Promise.all([...active, normal, rejected]);
   expect(starts.some((u) => u.endsWith('/4'))).toBe(false);
 });
+
+it('switching page aborts old shared reads and new consumers never inherit an aborted promise', async () => {
+  const api = new Api(0),
+    old = new AbortController(),
+    current = new AbortController();
+  let aborted = 0;
+  const calls: string[] = [];
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string, init: RequestInit) => {
+      calls.push(url);
+      if (calls.length <= 3)
+        return new Promise<Response>((_, reject) =>
+          init.signal!.addEventListener(
+            'abort',
+            () => {
+              aborted++;
+              reject(new DOMException('abort', 'AbortError'));
+            },
+            { once: true },
+          ),
+        );
+      return Promise.resolve(
+        new Response(
+          JSON.stringify(
+            url.includes('/episodes?')
+              ? { data: [], total: 0 }
+              : url.endsWith('/subjects')
+                ? []
+                : { id: 1 },
+          ),
+        ),
+      );
+    }),
+  );
+  const rejected = Promise.allSettled([
+    api.subject(1, 0, old.signal),
+    api.related(1, 0, old.signal),
+    api.episodes(1, 0, old.signal),
+  ]);
+  await vi.waitFor(() => expect(calls).toHaveLength(3));
+  old.abort();
+  await Promise.all([
+    api.subject(1, 1, current.signal),
+    api.related(1, 1, current.signal),
+    api.episodes(1, 1, current.signal),
+  ]);
+  expect(aborted).toBe(3);
+  expect((await rejected).every((r) => r.status === 'rejected')).toBe(true);
+  current.abort();
+  const count = calls.length;
+  await Promise.all([api.subject(1), api.related(1), api.episodes(1)]);
+  expect(calls).toHaveLength(count);
+});
+it('canceling rate-gap wait releases the slot without issuing an obsolete request', async () => {
+  vi.useFakeTimers();
+  vi.setSystemTime(100000);
+  const api = new Api(350),
+    old = new AbortController();
+  const fetcher = vi.fn(async () => new Response('{}'));
+  vi.stubGlobal('fetch', fetcher);
+  await api.subject(1);
+  const stopped = api.subject(2, 0, old.signal);
+  const rejected = expect(stopped).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.advanceTimersByTimeAsync(10);
+  old.abort();
+  await rejected;
+  const current = api.subject(3);
+  await vi.advanceTimersByTimeAsync(340);
+  await current;
+  expect(fetcher).toHaveBeenCalledTimes(2);
+  expect(fetcher.mock.calls[1][0]).toContain('/3');
+});

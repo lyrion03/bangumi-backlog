@@ -63,6 +63,9 @@ let results: Subject[] = [];
 let total = 0;
 let loading = false;
 let searchGeneration = 0;
+let pageJob: AbortController | null = null;
+let preparationJob: AbortController | null = null;
+let dialogJob: AbortController | null = null;
 let dialogGeneration = 0;
 let selected = new Set<number>();
 let hideHandled = false;
@@ -133,6 +136,7 @@ function filteredPage(
   cancelled: () => boolean,
   ready: () => Promise<void> = async () => {},
   priority = 1,
+  signal?: AbortSignal,
 ) {
   const source = { ...f, page: 1, size: 20 };
   const key = JSON.stringify([cacheScope(), api.token, source]);
@@ -143,7 +147,7 @@ function filteredPage(
     async (page) => {
       await ready();
       if (cancelled()) throw new DOMException('筛选已更新', 'AbortError');
-      return api.search({ ...source, page }, priority);
+      return api.search({ ...source, page }, priority, signal);
     },
     (s) => acceptsSubject(s, f),
     cancelled,
@@ -159,6 +163,7 @@ function find(id: number) {
 }
 function showView(name: string) {
   if (!['discover', 'records', 'sync'].includes(name)) name = 'discover';
+  if (name !== view) cancelPreparation();
   view = name;
   document.querySelectorAll<HTMLElement>('.view').forEach((el) => (el.hidden = el.id !== name));
   document.querySelectorAll<HTMLButtonElement>('.nav-item').forEach((el) => {
@@ -170,6 +175,7 @@ function showView(name: string) {
   renderRecords();
   renderSync();
   window.scrollTo({ top: 0 });
+  resumePreparation();
 }
 function renderStats() {
   const items = store.all();
@@ -278,98 +284,134 @@ function updateSeriesHint(id: number, hasSeries: boolean) {
     hasSeries,
   );
 }
-async function discoverSeries(generation: number) {
-  const scope = cacheScope();
-  const snapshot = structuredClone(filters);
-  const cancelled = () => generation !== searchGeneration || scope !== cacheScope();
-  const waitUntilReady = async () => {
-    while (
-      !cancelled() &&
-      (dialog.open || sync.progress.active || authBusy || exporting || view !== 'discover')
-    )
-      await new Promise((resolve) => setTimeout(resolve, 250));
-  };
-  const prepare = (subjects: Subject[], pageNumber: number, probeOnly = false) =>
-    prepareSeriesPage(api, seriesCache, scope, subjects, {
-      priority: pageNumber === snapshot.page ? 1 : 0,
-      probeOnly,
-      cancelled,
-      waitUntilReady,
-      onHint: pageNumber === snapshot.page ? updateSeriesHint : () => {},
-      onProgress: (phase, done, count, failed) => {
-        if (cancelled()) return;
-        $('#series-scan-status').textContent =
-          `第 ${pageNumber} 页 · ${phase === 'probe' ? '发现系列' : '关联缓存'} ${done} / ${count}${failed ? ` · ${failed} 项可重试` : ''}`;
-      },
+function cancelPreparation() {
+  preparationJob?.abort();
+  preparationJob = null;
+}
+function resumePreparation() {
+  if (
+    !preparationJob &&
+    !loading &&
+    results.length &&
+    view === 'discover' &&
+    !dialog.open &&
+    !sync.progress.active &&
+    !authBusy &&
+    !exporting
+  )
+    run(() => {
+      if (!preparationJob) return discoverSeries(searchGeneration);
     });
-  let subjects = visibleResults().slice();
-  let failed = false;
-  let cachedThrough = snapshot.page;
-  let probedThrough = snapshot.page;
-  let postersThrough = snapshot.page;
-  const report = (note = '') => {
-    if (cancelled()) return;
-    const parts = [`已缓存至第 ${cachedThrough} 页`];
-    if (probedThrough > cachedThrough) parts.push(`已探查第 ${probedThrough} 页`);
-    if (postersThrough > probedThrough) parts.push(`海报已准备至第 ${postersThrough} 页`);
-    if (note) parts.push(note);
-    else parts.push(failed ? '部分失败可重试' : '系列准备完成');
-    $('#series-scan-status').textContent = parts.join(' · ');
-  };
-  for (let distance = 0; distance <= 3 && !cancelled(); distance++) {
-    const pageNumber = snapshot.page + distance;
-    if (distance) {
-      // Keep sparse filters from scanning the entire catalog merely to fill the prefetch window.
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      await waitUntilReady();
+}
+async function discoverSeries(generation: number) {
+  if (generation !== searchGeneration || loading) return;
+  cancelPreparation();
+  const job = new AbortController();
+  preparationJob = job;
+  try {
+    const scope = cacheScope();
+    const snapshot = structuredClone(filters);
+    const cancelled = () =>
+      job.signal.aborted || generation !== searchGeneration || scope !== cacheScope();
+    const waitUntilReady = async () => {
+      while (
+        !cancelled() &&
+        (dialog.open || sync.progress.active || authBusy || exporting || view !== 'discover')
+      )
+        await new Promise((resolve) => setTimeout(resolve, 250));
+    };
+    const prepare = (subjects: Subject[], pageNumber: number, probeOnly = false) =>
+      prepareSeriesPage(api, seriesCache, scope, subjects, {
+        priority: pageNumber === snapshot.page ? 1 : 0,
+        concurrency: pageNumber === snapshot.page ? 3 : 1,
+        signal: job.signal,
+        probeOnly,
+        cancelled,
+        waitUntilReady,
+        onHint: pageNumber === snapshot.page ? updateSeriesHint : () => {},
+        onProgress: (phase, done, count, failed) => {
+          if (cancelled()) return;
+          $('#series-scan-status').textContent =
+            `第 ${pageNumber} 页 · ${phase === 'probe' ? '发现系列' : '关联缓存'} ${done} / ${count}${failed ? ` · ${failed} 项可重试` : ''}`;
+        },
+      });
+    let subjects = visibleResults().slice();
+    let failed = false;
+    let cachedThrough = snapshot.page;
+    let probedThrough = snapshot.page;
+    let postersThrough = snapshot.page;
+    const report = (note = '') => {
       if (cancelled()) return;
-      try {
-        const nextPage = await filteredPage(
-          { ...snapshot, page: pageNumber },
-          cancelled,
-          waitUntilReady,
-          0,
-        );
+      const parts = [`已缓存至第 ${cachedThrough} 页`];
+      if (probedThrough > cachedThrough) parts.push(`已探查第 ${probedThrough} 页`);
+      if (postersThrough > probedThrough) parts.push(`海报已准备至第 ${postersThrough} 页`);
+      if (note) parts.push(note);
+      else parts.push(failed ? '部分失败可重试' : '系列准备完成');
+      $('#series-scan-status').textContent = parts.join(' · ');
+    };
+    for (let distance = 0; distance <= 3 && !cancelled(); distance++) {
+      const pageNumber = snapshot.page + distance;
+      if (distance) {
+        // Keep sparse filters from scanning the entire catalog merely to fill the prefetch window.
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        await waitUntilReady();
         if (cancelled()) return;
-        // Extra IDs already supplied in a catalog chunk can expand totals at zero network cost.
-        total = nextPage.total;
-        totalExact = nextPage.exact;
-        renderPager();
-        renderResultsCount();
-        if (!nextPage.filled) {
-          report('已暂停预加载，切页时继续');
+        try {
+          const nextPage = await filteredPage(
+            { ...snapshot, page: pageNumber },
+            cancelled,
+            waitUntilReady,
+            0,
+            job.signal,
+          );
+          if (cancelled()) return;
+          // Extra IDs already supplied in a catalog chunk can expand totals at zero network cost.
+          total = nextPage.total;
+          totalExact = nextPage.exact;
+          renderPager();
+          renderResultsCount();
+          if (!nextPage.filled) {
+            report('已暂停预加载，切页时继续');
+            return;
+          }
+          if (nextPage.page < pageNumber || !nextPage.data.length) {
+            report();
+            return;
+          }
+          subjects = nextPage.data;
+        } catch {
+          report('后续页将在切页时重试');
           return;
         }
-        if (nextPage.page < pageNumber || !nextPage.data.length) {
-          report();
-          return;
-        }
-        subjects = nextPage.data;
-      } catch {
-        report('后续页将在切页时重试');
-        return;
       }
+      if (distance <= 2) {
+        const result = await prepare(subjects, pageNumber, distance === 2);
+        if (cancelled()) return;
+        failed ||= !!result?.failed;
+        probedThrough = pageNumber;
+        if (distance <= 1) cachedThrough = pageNumber;
+      }
+      if (distance) {
+        await preloadPosters(subjects, cancelled, waitUntilReady);
+        if (cancelled()) return;
+        postersThrough = pageNumber;
+      }
+      report();
+      if (totalExact && pageNumber >= totalPages(snapshot.size)) return;
     }
-    if (distance <= 2) {
-      const result = await prepare(subjects, pageNumber, distance === 2);
-      if (cancelled()) return;
-      failed ||= !!result?.failed;
-      probedThrough = pageNumber;
-      if (distance <= 1) cachedThrough = pageNumber;
-    }
-    if (distance) {
-      await preloadPosters(subjects, cancelled, waitUntilReady);
-      if (cancelled()) return;
-      postersThrough = pageNumber;
-    }
-    report();
-    if (totalExact && pageNumber >= totalPages(snapshot.size)) return;
+    // The official catalog/search APIs return full records, not an ID-only projection.
+    // Do not fetch page n+4 onward just to increase an inexact page count.
+  } finally {
+    if (preparationJob === job) preparationJob = null;
   }
-  // The official catalog/search APIs return full records, not an ID-only projection.
-  // Do not fetch page n+4 onward just to increase an inexact page count.
 }
 
-async function search() {
+async function search(checkCompleted = false) {
+  cancelPreparation();
+  pageJob?.abort();
+  const job = new AbortController();
+  pageJob = job;
+  const previousIds = new Set(results.map((s) => s.id));
   const generation = ++searchGeneration;
   $('#series-scan-status').textContent = '';
   loading = true;
@@ -387,6 +429,9 @@ async function search() {
     const page = await filteredPage(
       structuredClone(filters),
       () => generation !== searchGeneration,
+      undefined,
+      1,
+      job.signal,
     );
     if (generation !== searchGeneration) return;
     total = page.total;
@@ -400,6 +445,8 @@ async function search() {
     }
     loading = false;
     renderGrid();
+    // A replacement is a new chance to mark: never skip it using the previous page snapshot.
+    if (checkCompleted && !results.some((s) => !previousIds.has(s.id))) maybeAutoNext();
     run(() => discoverSeries(generation));
   } catch (error) {
     if (generation !== searchGeneration) return;
@@ -471,7 +518,8 @@ function changed() {
   const signature = hiddenKey();
   if (signature !== hiddenSignature) {
     hiddenSignature = signature;
-    run(search);
+    // Start synchronously so mark() sees loading=true before considering auto-next.
+    void search(true).catch(fail);
   } else if (!loading) renderGrid();
 }
 store.onChange(changed);
@@ -506,7 +554,7 @@ function maybeAutoNext(pageSubjects: Subject[] = visibleResults()) {
     filters.page < totalPages()
   ) {
     filters.page++;
-    run(search);
+    void search().catch(fail);
   }
 }
 function mark(
@@ -543,6 +591,9 @@ sync.onCancel = () => {
 };
 let dialogPageScroll = 0;
 function openDialog(heading: string, content: string, wide = false) {
+  cancelPreparation();
+  dialogJob?.abort();
+  dialogJob = null;
   if (pendingConflict) closeDialog();
   if (!dialog.open) dialogPageScroll = window.scrollY;
   dialogGeneration++;
@@ -554,6 +605,8 @@ function openDialog(heading: string, content: string, wide = false) {
   dialog.scrollTop = 0;
 }
 function closeDialog() {
+  dialogJob?.abort();
+  dialogJob = null;
   stopRadar();
   const resolve = pendingConflict;
   pendingConflict = null;
@@ -563,8 +616,11 @@ function closeDialog() {
   confirmCallback = null;
   dialog.close();
   window.scrollTo({ top: dialogPageScroll, behavior: 'instant' });
+  resumePreparation();
 }
 function closeTopDialog() {
+  dialogJob?.abort();
+  dialogJob = null;
   if (!seriesReturn) return closeDialog();
   const previous = seriesReturn;
   seriesReturn = null;
@@ -767,7 +823,10 @@ function renderProgress() {
     .forEach((b) => (b.disabled = p.active || authBusy || exporting));
 }
 sync.onProgress = () => {
-  if (sync.progress.active) stopRadar();
+  if (sync.progress.active) {
+    stopRadar();
+    cancelPreparation();
+  } else resumePreparation();
   renderProgress();
   renderAuth();
 };
@@ -861,8 +920,10 @@ async function detail(id: number) {
   if (previous)
     dialog.querySelector('.dialog-header button')!.setAttribute('aria-label', '返回系列补标');
   const gen = dialogGeneration;
+  const job = new AbortController();
+  dialogJob = job;
   api
-    .subject(id, 2)
+    .subject(id, 2, job.signal)
     .then((s) => {
       if (gen !== dialogGeneration) return;
       dialogSubject = s;
@@ -872,7 +933,7 @@ async function detail(id: number) {
       if (gen === dialogGeneration) $('#detail-summary').textContent = base.summary || e.message;
     });
   api
-    .characters(id, 2)
+    .characters(id, 2, job.signal)
     .then((chars) => {
       if (gen !== dialogGeneration) return;
       const order: Record<string, number> = { 主角: 0, 配角: 1, 客串: 2 };
@@ -890,7 +951,7 @@ async function detail(id: number) {
       if (gen === dialogGeneration) $('#characters').textContent = e.message;
     });
   try {
-    const eps = await api.episodes(id, 2);
+    const eps = await api.episodes(id, 2, job.signal);
     if (gen !== dialogGeneration) return;
     episodeList = eps
       .filter((ep) => ep.type === 0 || ep.type === 1)
@@ -898,7 +959,7 @@ async function detail(id: number) {
     let note = '未连接账号，仅显示本地待同步的单集修改；不会根据已看总数推测具体集数。';
     if (api.token) {
       try {
-        const remote = await api.episodeCollections(id, 2);
+        const remote = await api.episodeCollections(id, 2, job.signal);
         if (gen !== dialogGeneration) return;
         episodeTypes = Object.fromEntries(remote.map((x) => [x.episode.id, x.type]));
         note = '已读取账号单集进度。点击单集暂存修改，推送后生效。';
@@ -932,6 +993,8 @@ async function series(id: number) {
     true,
   );
   const gen = dialogGeneration;
+  const job = new AbortController();
+  dialogJob = job;
   try {
     const scope = cacheScope();
     const cached = seriesCache.series(scope, id);
@@ -940,13 +1003,14 @@ async function series(id: number) {
       (await collectSeries(
         api,
         base,
-        () => gen !== dialogGeneration,
+        () => job.signal.aborted || gen !== dialogGeneration,
         (count) => {
           if (gen === dialogGeneration)
             $('#series-progress').textContent = `已找到 ${count} 部作品…`;
         },
         undefined,
         2,
+        job.signal,
       ));
     if (gen !== dialogGeneration) return;
     if (!cached) seriesCache.putSeries(scope, id, found);
