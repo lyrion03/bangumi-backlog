@@ -76,14 +76,19 @@ export class Api {
     body?: unknown,
     token = this.token,
     priority = 1,
+    signal?: AbortSignal,
   ): Promise<T> {
     if (!path.startsWith('/v0/') || path.includes('://') || path.includes('\\'))
       return Promise.reject(new Error('仅允许 Bangumi v0 API 路径'));
     const run = async () => {
       for (let attempt = 0; attempt < 3; attempt++) {
+        signal?.throwIfAborted();
         await this.startRequest();
+        signal?.throwIfAborted();
         const start = Date.now();
         const controller = new AbortController();
+        const abort = () => controller.abort();
+        signal?.addEventListener('abort', abort, { once: true });
         const timeout = setTimeout(() => controller.abort(), 20000);
         let status = 0;
         try {
@@ -133,6 +138,7 @@ export class Api {
           }
           return data as T;
         } catch (error) {
+          if (signal?.aborted) throw new DOMException('分析已停止', 'AbortError');
           if (error instanceof ApiError) throw error;
           throw new ApiError(
             error instanceof Error && error.name === 'AbortError'
@@ -141,6 +147,7 @@ export class Api {
           );
         } finally {
           clearTimeout(timeout);
+          signal?.removeEventListener('abort', abort);
           this.logs.unshift({ time: Date.now(), method, path, status, ms: Date.now() - start });
           this.logs = this.logs.slice(0, 80);
         }
@@ -148,8 +155,10 @@ export class Api {
       throw new ApiError('请求失败');
     };
     return (async () => {
+      signal?.throwIfAborted();
       await this.acquire(priority, path, token);
       try {
+        signal?.throwIfAborted();
         return await run();
       } finally {
         this.release();

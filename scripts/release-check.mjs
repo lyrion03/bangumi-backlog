@@ -47,13 +47,27 @@ try {
   await page.goto('http://127.0.0.1:4175/subdirectory/');
   await page.getByRole('button', { name: '稍后连接', exact: true }).click();
   await page.locator('.anime-card').first().waitFor();
+  await page.locator('.nav-item[data-view="records"]').click();
+  await page.getByRole('button', { name: '图一乐雷达图' }).click();
+  await page.locator('.radar-chart svg').waitFor();
+  const radar = await page.locator('.radar-axis').count();
+  await page.getByRole('button', { name: '关闭弹窗', exact: true }).click();
+  const invalidProfile = await fetch('http://127.0.0.1:4175/__bangumi/registration/invalid');
   const checks = {
+    radar,
+    profileService: invalidProfile.status === 400,
     title: await page.title(),
     cards: await page.locator('.anime-card').count(),
     overflow: await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
     errors,
   };
-  if (checks.cards !== 10 || checks.overflow || errors.length)
+  if (
+    checks.cards !== 10 ||
+    checks.radar !== 6 ||
+    !checks.profileService ||
+    checks.overflow ||
+    errors.length
+  )
     throw new Error(JSON.stringify(checks));
   writeFileSync(join(root, 'qa', 'release-smoke.json'), JSON.stringify(checks, null, 2));
   console.log(JSON.stringify(checks));

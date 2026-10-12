@@ -1,0 +1,4529 @@
+{
+  "capturedAt": "2026-10-10T02:56:42.610Z",
+  "subjects": [
+    {
+      "id": 51,
+      "name": "CLANNAD -クラナド-",
+      "name_cn": "CLANNAD",
+      "date": "2007-10-04",
+      "platform": "TV",
+      "eps": 23,
+      "rating": {
+        "score": 8.4,
+        "total": 28714
+      },
+      "collection": {
+        "on_hold": 2018,
+        "dropped": 461,
+        "wish": 8952,
+        "collect": 45331,
+        "doing": 3015
+      },
+      "tags": [
+        {
+          "name": "Clannad",
+          "count": 7276,
+          "total_count": 21089
+        },
+        {
+          "name": "京阿尼",
+          "count": 7135,
+          "total_count": 216521
+        },
+        {
+          "name": "key",
+          "count": 6309,
+          "total_count": 47412
+        },
+        {
+          "name": "催泪",
+          "count": 5554,
+          "total_count": 61210
+        },
+        {
+          "name": "団子大家族",
+          "count": 3577,
+          "total_count": 3657
+        },
+        {
+          "name": "治愈",
+          "count": 3576,
+          "total_count": 307172
+        },
+        {
+          "name": "神作",
+          "count": 2806,
+          "total_count": 48254
+        },
+        {
+          "name": "GAL改",
+          "count": 2699,
+          "total_count": 79497
+        },
+        {
+          "name": "人生",
+          "count": 2231,
+          "total_count": 12057
+        },
+        {
+          "name": "TV",
+          "count": 1866,
+          "total_count": 1435730
+        },
+        {
+          "name": "2007年10月",
+          "count": 1719,
+          "total_count": 5660
+        },
+        {
+          "name": "游戏改",
+          "count": 1508,
+          "total_count": 165209
+        },
+        {
+          "name": "校园",
+          "count": 1253,
+          "total_count": 467057
+        },
+        {
+          "name": "恋爱",
+          "count": 1169,
+          "total_count": 579108
+        },
+        {
+          "name": "2007",
+          "count": 1164,
+          "total_count": 38148
+        },
+        {
+          "name": "麻枝准",
+          "count": 907,
+          "total_count": 23508
+        },
+        {
+          "name": "京都",
+          "count": 711,
+          "total_count": 7711
+        },
+        {
+          "name": "石原立也",
+          "count": 338,
+          "total_count": 16364
+        },
+        {
+          "name": "京都动画",
+          "count": 328,
+          "total_count": 33481
+        },
+        {
+          "name": "日本",
+          "count": 315,
+          "total_count": 309696
+        },
+        {
+          "name": "日常",
+          "count": 207,
+          "total_count": 412084
+        },
+        {
+          "name": "海星",
+          "count": 159,
+          "total_count": 166
+        },
+        {
+          "name": "改编自游戏",
+          "count": 130,
+          "total_count": 136
+        },
+        {
+          "name": "京都アニメーション",
+          "count": 85,
+          "total_count": 6537
+        },
+        {
+          "name": "中村悠一",
+          "count": 75,
+          "total_count": 11905
+        },
+        {
+          "name": "后宫",
+          "count": 71,
+          "total_count": 309672
+        },
+        {
+          "name": "2007年10月番",
+          "count": 71,
+          "total_count": 80
+        },
+        {
+          "name": "搞笑",
+          "count": 57,
+          "total_count": 653432
+        },
+        {
+          "name": "galgame",
+          "count": 53,
+          "total_count": 4153
+        },
+        {
+          "name": "志茂文彦",
+          "count": 52,
+          "total_count": 1004
+        }
+      ],
+      "meta_tags": [
+        "校园",
+        "TV",
+        "恋爱",
+        "日本",
+        "游戏改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "23"
+        },
+        {
+          "key": "导演",
+          "value": "石原立也"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 876,
+      "name": "CLANNAD 〜AFTER STORY〜",
+      "name_cn": "",
+      "date": "2008-10-02",
+      "platform": "TV",
+      "eps": 24,
+      "rating": {
+        "score": 9.2,
+        "total": 31882
+      },
+      "collection": {
+        "on_hold": 1360,
+        "dropped": 391,
+        "wish": 8989,
+        "collect": 47685,
+        "doing": 1954
+      },
+      "tags": [
+        {
+          "name": "Clannad",
+          "count": 9627,
+          "total_count": 21089
+        },
+        {
+          "name": "京阿尼",
+          "count": 9118,
+          "total_count": 216521
+        },
+        {
+          "name": "催泪",
+          "count": 7430,
+          "total_count": 61210
+        },
+        {
+          "name": "key",
+          "count": 7416,
+          "total_count": 47412
+        },
+        {
+          "name": "神作",
+          "count": 5178,
+          "total_count": 48254
+        },
+        {
+          "name": "麻枝准",
+          "count": 5108,
+          "total_count": 23508
+        },
+        {
+          "name": "治愈",
+          "count": 5005,
+          "total_count": 307172
+        },
+        {
+          "name": "人生",
+          "count": 4434,
+          "total_count": 12057
+        },
+        {
+          "name": "TV",
+          "count": 2193,
+          "total_count": 1435728
+        },
+        {
+          "name": "~After-Story~",
+          "count": 1977,
+          "total_count": 1987
+        },
+        {
+          "name": "治愈系",
+          "count": 1655,
+          "total_count": 25379
+        },
+        {
+          "name": "游戏改",
+          "count": 1338,
+          "total_count": 165209
+        },
+        {
+          "name": "恋爱",
+          "count": 1243,
+          "total_count": 579108
+        },
+        {
+          "name": "2008年10月",
+          "count": 1170,
+          "total_count": 8547
+        },
+        {
+          "name": "galgame",
+          "count": 1095,
+          "total_count": 4153
+        },
+        {
+          "name": "爱情",
+          "count": 922,
+          "total_count": 13694
+        },
+        {
+          "name": "2008",
+          "count": 859,
+          "total_count": 36190
+        },
+        {
+          "name": "催淚",
+          "count": 850,
+          "total_count": 964
+        },
+        {
+          "name": "GAL改",
+          "count": 738,
+          "total_count": 79497
+        },
+        {
+          "name": "日常",
+          "count": 573,
+          "total_count": 412084
+        },
+        {
+          "name": "日本",
+          "count": 469,
+          "total_count": 309695
+        },
+        {
+          "name": "石原立也",
+          "count": 343,
+          "total_count": 16364
+        },
+        {
+          "name": "京都动画",
+          "count": 321,
+          "total_count": 33481
+        },
+        {
+          "name": "校园",
+          "count": 198,
+          "total_count": 467057
+        },
+        {
+          "name": "亲情",
+          "count": 158,
+          "total_count": 5592
+        },
+        {
+          "name": "京都",
+          "count": 102,
+          "total_count": 7711
+        },
+        {
+          "name": "AS",
+          "count": 96,
+          "total_count": 130
+        },
+        {
+          "name": "京都アニメーション",
+          "count": 88,
+          "total_count": 6537
+        },
+        {
+          "name": "续作",
+          "count": 66,
+          "total_count": 47974
+        },
+        {
+          "name": "2008年",
+          "count": 65,
+          "total_count": 1962
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "恋爱",
+        "日本",
+        "游戏改",
+        "日常"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "24"
+        },
+        {
+          "key": "导演",
+          "value": "石原立也"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 237,
+      "name": "GHOST IN THE SHELL / 攻殻機動隊",
+      "name_cn": "攻壳机动队",
+      "date": "1995-11-18",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 8.8,
+        "total": 13027
+      },
+      "collection": {
+        "on_hold": 515,
+        "dropped": 134,
+        "wish": 6945,
+        "collect": 19902,
+        "doing": 870
+      },
+      "tags": [
+        {
+          "name": "押井守",
+          "count": 3874,
+          "total_count": 20466
+        },
+        {
+          "name": "攻壳机动队",
+          "count": 3029,
+          "total_count": 15477
+        },
+        {
+          "name": "剧场版",
+          "count": 2862,
+          "total_count": 734446
+        },
+        {
+          "name": "科幻",
+          "count": 2567,
+          "total_count": 258442
+        },
+        {
+          "name": "赛博朋克",
+          "count": 1795,
+          "total_count": 12706
+        },
+        {
+          "name": "1995",
+          "count": 1522,
+          "total_count": 9511
+        },
+        {
+          "name": "Production.IG",
+          "count": 1490,
+          "total_count": 4339
+        },
+        {
+          "name": "士郎正宗",
+          "count": 842,
+          "total_count": 5897
+        },
+        {
+          "name": "Production.I.G",
+          "count": 775,
+          "total_count": 42705
+        },
+        {
+          "name": "神作",
+          "count": 625,
+          "total_count": 48254
+        },
+        {
+          "name": "漫画改",
+          "count": 580,
+          "total_count": 885632
+        },
+        {
+          "name": "超现实",
+          "count": 379,
+          "total_count": 1927
+        },
+        {
+          "name": "日本",
+          "count": 297,
+          "total_count": 309691
+        },
+        {
+          "name": "攻殻機動隊",
+          "count": 293,
+          "total_count": 2799
+        },
+        {
+          "name": "ProductionI.G",
+          "count": 211,
+          "total_count": 35429
+        },
+        {
+          "name": "漫改",
+          "count": 143,
+          "total_count": 368241
+        },
+        {
+          "name": "川井宪次",
+          "count": 76,
+          "total_count": 5499
+        },
+        {
+          "name": "经典",
+          "count": 73,
+          "total_count": 23254
+        },
+        {
+          "name": "战斗",
+          "count": 64,
+          "total_count": 484954
+        },
+        {
+          "name": "严肃",
+          "count": 55,
+          "total_count": 152
+        },
+        {
+          "name": "脑后插管",
+          "count": 49,
+          "total_count": 50
+        },
+        {
+          "name": "动画电影",
+          "count": 48,
+          "total_count": 44404
+        },
+        {
+          "name": "电影",
+          "count": 37,
+          "total_count": 13690
+        },
+        {
+          "name": "川井憲次",
+          "count": 37,
+          "total_count": 1693
+        },
+        {
+          "name": "90年代",
+          "count": 36,
+          "total_count": 4083
+        },
+        {
+          "name": "哲学",
+          "count": 35,
+          "total_count": 549
+        },
+        {
+          "name": "伊藤和典",
+          "count": 34,
+          "total_count": 532
+        },
+        {
+          "name": "1995年",
+          "count": 33,
+          "total_count": 416
+        },
+        {
+          "name": "原创",
+          "count": 30,
+          "total_count": 632334
+        },
+        {
+          "name": "SF",
+          "count": 28,
+          "total_count": 7282
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "科幻",
+        "剧场版",
+        "剧场版",
+        "日本",
+        "日本",
+        "漫画改",
+        "漫画改"
+      ],
+      "infobox": [
+        {
+          "key": "导演",
+          "value": "押井守"
+        },
+        {
+          "key": "话数",
+          "value": "1"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 238,
+      "name": "イノセンス",
+      "name_cn": "攻壳机动队2 无罪",
+      "date": "2004-03-06",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 8.7,
+        "total": 8366
+      },
+      "collection": {
+        "on_hold": 232,
+        "dropped": 69,
+        "wish": 3609,
+        "collect": 12741,
+        "doing": 307
+      },
+      "tags": [
+        {
+          "name": "押井守",
+          "count": 2587,
+          "total_count": 20466
+        },
+        {
+          "name": "剧场版",
+          "count": 1994,
+          "total_count": 734475
+        },
+        {
+          "name": "攻壳机动队",
+          "count": 1892,
+          "total_count": 15477
+        },
+        {
+          "name": "Production.I.G",
+          "count": 1345,
+          "total_count": 42705
+        },
+        {
+          "name": "科幻",
+          "count": 1335,
+          "total_count": 258455
+        },
+        {
+          "name": "2004",
+          "count": 986,
+          "total_count": 24031
+        },
+        {
+          "name": "赛博朋克",
+          "count": 807,
+          "total_count": 12707
+        },
+        {
+          "name": "士郎正宗",
+          "count": 698,
+          "total_count": 5897
+        },
+        {
+          "name": "川井宪次",
+          "count": 583,
+          "total_count": 5499
+        },
+        {
+          "name": "漫画改",
+          "count": 345,
+          "total_count": 885672
+        },
+        {
+          "name": "神作",
+          "count": 309,
+          "total_count": 48254
+        },
+        {
+          "name": "攻殻機動隊",
+          "count": 192,
+          "total_count": 2799
+        },
+        {
+          "name": "ProductionI.G",
+          "count": 181,
+          "total_count": 35430
+        },
+        {
+          "name": "日本",
+          "count": 161,
+          "total_count": 309721
+        },
+        {
+          "name": "漫改",
+          "count": 94,
+          "total_count": 368251
+        },
+        {
+          "name": "美学",
+          "count": 92,
+          "total_count": 125
+        },
+        {
+          "name": "原创",
+          "count": 38,
+          "total_count": 632350
+        },
+        {
+          "name": "经典",
+          "count": 36,
+          "total_count": 23256
+        },
+        {
+          "name": "战斗",
+          "count": 34,
+          "total_count": 484987
+        },
+        {
+          "name": "动画电影",
+          "count": 33,
+          "total_count": 44417
+        },
+        {
+          "name": "2004年",
+          "count": 31,
+          "total_count": 1286
+        },
+        {
+          "name": "川井憲次",
+          "count": 29,
+          "total_count": 1693
+        },
+        {
+          "name": "Production.IG",
+          "count": 28,
+          "total_count": 4339
+        },
+        {
+          "name": "冲浦启之",
+          "count": 26,
+          "total_count": 888
+        },
+        {
+          "name": "电影",
+          "count": 24,
+          "total_count": 13688
+        },
+        {
+          "name": "哲学",
+          "count": 23,
+          "total_count": 549
+        },
+        {
+          "name": "SF",
+          "count": 22,
+          "total_count": 7282
+        },
+        {
+          "name": "Production_I.G",
+          "count": 21,
+          "total_count": 1815
+        },
+        {
+          "name": "2004年3月",
+          "count": 17,
+          "total_count": 52
+        },
+        {
+          "name": "2000s",
+          "count": 16,
+          "total_count": 3080
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "科幻",
+        "剧场版",
+        "剧场版",
+        "日本",
+        "日本",
+        "漫画改",
+        "漫画改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "1"
+        },
+        {
+          "key": "导演",
+          "value": "押井守"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 9979,
+      "name": "機動警察パトレイバー the Movie",
+      "name_cn": "机动警察剧场版1 东京毁灭战",
+      "date": "1989-07-15",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 7.8,
+        "total": 2292
+      },
+      "collection": {
+        "on_hold": 61,
+        "dropped": 33,
+        "wish": 951,
+        "collect": 3344,
+        "doing": 87
+      },
+      "tags": [
+        {
+          "name": "押井守",
+          "count": 806,
+          "total_count": 20467
+        },
+        {
+          "name": "剧场版",
+          "count": 771,
+          "total_count": 734292
+        },
+        {
+          "name": "1989",
+          "count": 410,
+          "total_count": 6172
+        },
+        {
+          "name": "Production.I.G",
+          "count": 383,
+          "total_count": 42701
+        },
+        {
+          "name": "机动警察",
+          "count": 310,
+          "total_count": 2107
+        },
+        {
+          "name": "原创",
+          "count": 309,
+          "total_count": 632066
+        },
+        {
+          "name": "科幻",
+          "count": 280,
+          "total_count": 258296
+        },
+        {
+          "name": "萝卜",
+          "count": 206,
+          "total_count": 53058
+        },
+        {
+          "name": "川井宪次",
+          "count": 192,
+          "total_count": 5499
+        },
+        {
+          "name": "studiodeen",
+          "count": 144,
+          "total_count": 26955
+        },
+        {
+          "name": "机战",
+          "count": 72,
+          "total_count": 51644
+        },
+        {
+          "name": "ProductionI.G",
+          "count": 66,
+          "total_count": 35418
+        },
+        {
+          "name": "伊藤和典",
+          "count": 60,
+          "total_count": 532
+        },
+        {
+          "name": "日本",
+          "count": 40,
+          "total_count": 309441
+        },
+        {
+          "name": "80年代",
+          "count": 36,
+          "total_count": 2236
+        },
+        {
+          "name": "川井憲次",
+          "count": 16,
+          "total_count": 1693
+        },
+        {
+          "name": "1980s",
+          "count": 13,
+          "total_count": 1100
+        },
+        {
+          "name": "电影",
+          "count": 13,
+          "total_count": 13689
+        },
+        {
+          "name": "1989年",
+          "count": 12,
+          "total_count": 305
+        },
+        {
+          "name": "漫画改",
+          "count": 11,
+          "total_count": 885044
+        },
+        {
+          "name": "スタジオディーン",
+          "count": 11,
+          "total_count": 904
+        },
+        {
+          "name": "机动条子",
+          "count": 11,
+          "total_count": 94
+        },
+        {
+          "name": "1989年7月",
+          "count": 9,
+          "total_count": 40
+        },
+        {
+          "name": "映画",
+          "count": 8,
+          "total_count": 6325
+        },
+        {
+          "name": "战斗",
+          "count": 8,
+          "total_count": 484655
+        },
+        {
+          "name": "日本动画",
+          "count": 7,
+          "total_count": 35813
+        },
+        {
+          "name": "SF",
+          "count": 7,
+          "total_count": 7281
+        },
+        {
+          "name": "动画",
+          "count": 6,
+          "total_count": 35778
+        },
+        {
+          "name": "STUDIO_DEEN",
+          "count": 6,
+          "total_count": 1433
+        },
+        {
+          "name": "黄瀬和哉",
+          "count": 6,
+          "total_count": 226
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "剧场版",
+        "日本",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "1"
+        },
+        {
+          "key": "导演",
+          "value": "押井守"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 321,
+      "name": "機動警察パトレイバー 2 the Movie",
+      "name_cn": "机动警察剧场版2 和平保卫战",
+      "date": "1993-08-07",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 8.8,
+        "total": 4090
+      },
+      "collection": {
+        "on_hold": 158,
+        "dropped": 69,
+        "wish": 3043,
+        "collect": 5937,
+        "doing": 198
+      },
+      "tags": [
+        {
+          "name": "押井守",
+          "count": 1568,
+          "total_count": 20467
+        },
+        {
+          "name": "剧场版",
+          "count": 1287,
+          "total_count": 734379
+        },
+        {
+          "name": "机动警察",
+          "count": 770,
+          "total_count": 2107
+        },
+        {
+          "name": "科幻",
+          "count": 616,
+          "total_count": 258373
+        },
+        {
+          "name": "1993",
+          "count": 588,
+          "total_count": 4776
+        },
+        {
+          "name": "ProductionI.G",
+          "count": 530,
+          "total_count": 35427
+        },
+        {
+          "name": "Production.I.G",
+          "count": 490,
+          "total_count": 42701
+        },
+        {
+          "name": "川井宪次",
+          "count": 404,
+          "total_count": 5499
+        },
+        {
+          "name": "政治",
+          "count": 396,
+          "total_count": 2394
+        },
+        {
+          "name": "原创",
+          "count": 351,
+          "total_count": 632221
+        },
+        {
+          "name": "萝卜",
+          "count": 262,
+          "total_count": 53059
+        },
+        {
+          "name": "今敏",
+          "count": 118,
+          "total_count": 20713
+        },
+        {
+          "name": "伊藤和典",
+          "count": 82,
+          "total_count": 532
+        },
+        {
+          "name": "日本",
+          "count": 66,
+          "total_count": 309594
+        },
+        {
+          "name": "机动条子",
+          "count": 41,
+          "total_count": 94
+        },
+        {
+          "name": "机战",
+          "count": 29,
+          "total_count": 51673
+        },
+        {
+          "name": "神作",
+          "count": 25,
+          "total_count": 48251
+        },
+        {
+          "name": "川井憲次",
+          "count": 22,
+          "total_count": 1693
+        },
+        {
+          "name": "90年代",
+          "count": 22,
+          "total_count": 4082
+        },
+        {
+          "name": "1993年",
+          "count": 17,
+          "total_count": 252
+        },
+        {
+          "name": "漫画改",
+          "count": 16,
+          "total_count": 885379
+        },
+        {
+          "name": "1990s",
+          "count": 15,
+          "total_count": 1652
+        },
+        {
+          "name": "1993年8月",
+          "count": 14,
+          "total_count": 17
+        },
+        {
+          "name": "Production.IG",
+          "count": 13,
+          "total_count": 4339
+        },
+        {
+          "name": "战争",
+          "count": 13,
+          "total_count": 22372
+        },
+        {
+          "name": "经典",
+          "count": 12,
+          "total_count": 23253
+        },
+        {
+          "name": "电影",
+          "count": 11,
+          "total_count": 13690
+        },
+        {
+          "name": "SF",
+          "count": 10,
+          "total_count": 7281
+        },
+        {
+          "name": "动画电影",
+          "count": 10,
+          "total_count": 44400
+        },
+        {
+          "name": "日本动画",
+          "count": 9,
+          "total_count": 35813
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "剧场版",
+        "日本",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "1"
+        },
+        {
+          "key": "导演",
+          "value": "押井守"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 233,
+      "name": "劇場版 空の境界 第一章 俯瞰風景",
+      "name_cn": "剧场版 空之境界 第一章 俯瞰风景",
+      "date": "2007-12-01",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 7.9,
+        "total": 12240
+      },
+      "collection": {
+        "on_hold": 228,
+        "dropped": 64,
+        "wish": 2343,
+        "collect": 20293,
+        "doing": 334
+      },
+      "tags": [
+        {
+          "name": "空之境界",
+          "count": 2765,
+          "total_count": 20899
+        },
+        {
+          "name": "剧场版",
+          "count": 2668,
+          "total_count": 734453
+        },
+        {
+          "name": "Type-Moon",
+          "count": 2436,
+          "total_count": 68512
+        },
+        {
+          "name": "ufotable",
+          "count": 1740,
+          "total_count": 55810
+        },
+        {
+          "name": "奈须きのこ",
+          "count": 1492,
+          "total_count": 10532
+        },
+        {
+          "name": "梶浦由记",
+          "count": 1246,
+          "total_count": 11535
+        },
+        {
+          "name": "2007",
+          "count": 1010,
+          "total_count": 38148
+        },
+        {
+          "name": "两仪式",
+          "count": 858,
+          "total_count": 5035
+        },
+        {
+          "name": "奇幻",
+          "count": 612,
+          "total_count": 487366
+        },
+        {
+          "name": "俯瞰风景",
+          "count": 579,
+          "total_count": 580
+        },
+        {
+          "name": "坂本真绫",
+          "count": 530,
+          "total_count": 5064
+        },
+        {
+          "name": "轻小说改",
+          "count": 488,
+          "total_count": 506856
+        },
+        {
+          "name": "战斗",
+          "count": 378,
+          "total_count": 484974
+        },
+        {
+          "name": "空の境界",
+          "count": 370,
+          "total_count": 4552
+        },
+        {
+          "name": "小说改",
+          "count": 362,
+          "total_count": 165951
+        },
+        {
+          "name": "日本",
+          "count": 159,
+          "total_count": 309704
+        },
+        {
+          "name": "轻改",
+          "count": 127,
+          "total_count": 154978
+        },
+        {
+          "name": "青木英",
+          "count": 105,
+          "total_count": 1704
+        },
+        {
+          "name": "TYPEMOON",
+          "count": 99,
+          "total_count": 572
+        },
+        {
+          "name": "轻小说",
+          "count": 70,
+          "total_count": 11456
+        },
+        {
+          "name": "梶浦由記",
+          "count": 60,
+          "total_count": 7621
+        },
+        {
+          "name": "蘑菇",
+          "count": 59,
+          "total_count": 2834
+        },
+        {
+          "name": "2007年",
+          "count": 58,
+          "total_count": 2022
+        },
+        {
+          "name": "あおきえい",
+          "count": 53,
+          "total_count": 607
+        },
+        {
+          "name": "奈须蘑菇",
+          "count": 40,
+          "total_count": 1251
+        },
+        {
+          "name": "2007年12月",
+          "count": 36,
+          "total_count": 152
+        },
+        {
+          "name": "悬疑",
+          "count": 32,
+          "total_count": 116062
+        },
+        {
+          "name": "剧情",
+          "count": 27,
+          "total_count": 16387
+        },
+        {
+          "name": "空境",
+          "count": 23,
+          "total_count": 114
+        },
+        {
+          "name": "铃村健一",
+          "count": 20,
+          "total_count": 1791
+        }
+      ],
+      "meta_tags": [
+        "剧场版",
+        "日本",
+        "奇幻",
+        "战斗",
+        "小说改"
+      ],
+      "infobox": [
+        {
+          "key": "导演",
+          "value": "あおきえい"
+        },
+        {
+          "key": "话数",
+          "value": "1"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 309311,
+      "name": "Cyberpunk: Edgerunners",
+      "name_cn": "赛博朋克：边缘行者",
+      "date": "2022-09-13",
+      "platform": "WEB",
+      "eps": 10,
+      "rating": {
+        "score": 8.3,
+        "total": 27785
+      },
+      "collection": {
+        "on_hold": 702,
+        "dropped": 237,
+        "wish": 5065,
+        "collect": 43800,
+        "doing": 2292
+      },
+      "tags": [
+        {
+          "name": "赛博朋克",
+          "count": 6389,
+          "total_count": 12707
+        },
+        {
+          "name": "TRIGGER",
+          "count": 5449,
+          "total_count": 41758
+        },
+        {
+          "name": "原创",
+          "count": 4412,
+          "total_count": 632336
+        },
+        {
+          "name": "科幻",
+          "count": 4350,
+          "total_count": 258444
+        },
+        {
+          "name": "今石洋之",
+          "count": 4262,
+          "total_count": 24735
+        },
+        {
+          "name": "Netflix",
+          "count": 3048,
+          "total_count": 22716
+        },
+        {
+          "name": "扳机社",
+          "count": 2901,
+          "total_count": 3264
+        },
+        {
+          "name": "游戏改",
+          "count": 2769,
+          "total_count": 165209
+        },
+        {
+          "name": "2022",
+          "count": 1979,
+          "total_count": 81469
+        },
+        {
+          "name": "战斗",
+          "count": 1732,
+          "total_count": 484958
+        },
+        {
+          "name": "2022年10月",
+          "count": 1286,
+          "total_count": 36062
+        },
+        {
+          "name": "TV",
+          "count": 908,
+          "total_count": 1435721
+        },
+        {
+          "name": "WEB",
+          "count": 792,
+          "total_count": 73616
+        },
+        {
+          "name": "吉成曜",
+          "count": 712,
+          "total_count": 5206
+        },
+        {
+          "name": "日本",
+          "count": 458,
+          "total_count": 309691
+        },
+        {
+          "name": "2022年9月",
+          "count": 353,
+          "total_count": 510
+        },
+        {
+          "name": "恋爱",
+          "count": 304,
+          "total_count": 579106
+        },
+        {
+          "name": "热血",
+          "count": 115,
+          "total_count": 217415
+        },
+        {
+          "name": "催泪",
+          "count": 114,
+          "total_count": 61210
+        },
+        {
+          "name": "致郁",
+          "count": 92,
+          "total_count": 23832
+        },
+        {
+          "name": "神作",
+          "count": 71,
+          "total_count": 48254
+        },
+        {
+          "name": "2022年",
+          "count": 60,
+          "total_count": 3509
+        },
+        {
+          "name": "2022年7月",
+          "count": 44,
+          "total_count": 28701
+        },
+        {
+          "name": "反乌托邦",
+          "count": 39,
+          "total_count": 6018
+        },
+        {
+          "name": "悠木碧",
+          "count": 37,
+          "total_count": 12334
+        },
+        {
+          "name": "血腥",
+          "count": 37,
+          "total_count": 8223
+        },
+        {
+          "name": "悲剧",
+          "count": 35,
+          "total_count": 2351
+        },
+        {
+          "name": "五十岚海",
+          "count": 31,
+          "total_count": 215
+        },
+        {
+          "name": "大塚雅彦",
+          "count": 21,
+          "total_count": 127
+        },
+        {
+          "name": "剧情",
+          "count": 19,
+          "total_count": 16386
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "日本",
+        "战斗",
+        "游戏改",
+        "欧美",
+        "WEB"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "10"
+        },
+        {
+          "key": "导演",
+          "value": "今石洋之"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 326895,
+      "name": "サマータイムレンダ",
+      "name_cn": "夏日重现",
+      "date": "2022-04-14",
+      "platform": "TV",
+      "eps": 25,
+      "rating": {
+        "score": 7.5,
+        "total": 20966
+      },
+      "collection": {
+        "on_hold": 2319,
+        "dropped": 1096,
+        "wish": 5666,
+        "collect": 33505,
+        "doing": 4515
+      },
+      "tags": [
+        {
+          "name": "悬疑",
+          "count": 6174,
+          "total_count": 116060
+        },
+        {
+          "name": "轮回",
+          "count": 5008,
+          "total_count": 17554
+        },
+        {
+          "name": "漫画改",
+          "count": 3145,
+          "total_count": 885642
+        },
+        {
+          "name": "2022年4月",
+          "count": 3076,
+          "total_count": 30169
+        },
+        {
+          "name": "奇幻",
+          "count": 2557,
+          "total_count": 487362
+        },
+        {
+          "name": "TV",
+          "count": 2077,
+          "total_count": 1435726
+        },
+        {
+          "name": "战斗",
+          "count": 1773,
+          "total_count": 484962
+        },
+        {
+          "name": "漫改",
+          "count": 1487,
+          "total_count": 368247
+        },
+        {
+          "name": "OLM",
+          "count": 1382,
+          "total_count": 13006
+        },
+        {
+          "name": "2022",
+          "count": 1338,
+          "total_count": 81469
+        },
+        {
+          "name": "智斗",
+          "count": 1274,
+          "total_count": 23660
+        },
+        {
+          "name": "夏日重现",
+          "count": 1029,
+          "total_count": 1030
+        },
+        {
+          "name": "渡边步",
+          "count": 639,
+          "total_count": 1677
+        },
+        {
+          "name": "日本",
+          "count": 339,
+          "total_count": 309692
+        },
+        {
+          "name": "濑古浩司",
+          "count": 322,
+          "total_count": 1644
+        },
+        {
+          "name": "恋爱",
+          "count": 189,
+          "total_count": 579107
+        },
+        {
+          "name": "渡辺歩",
+          "count": 162,
+          "total_count": 1012
+        },
+        {
+          "name": "日本动画",
+          "count": 90,
+          "total_count": 35887
+        },
+        {
+          "name": "推理",
+          "count": 85,
+          "total_count": 75083
+        },
+        {
+          "name": "2022年",
+          "count": 65,
+          "total_count": 3509
+        },
+        {
+          "name": "剧情",
+          "count": 51,
+          "total_count": 16386
+        },
+        {
+          "name": "热血",
+          "count": 39,
+          "total_count": 217415
+        },
+        {
+          "name": "半年番",
+          "count": 31,
+          "total_count": 4428
+        },
+        {
+          "name": "穿越",
+          "count": 30,
+          "total_count": 65213
+        },
+        {
+          "name": "纯爱",
+          "count": 20,
+          "total_count": 39891
+        },
+        {
+          "name": "神作",
+          "count": 18,
+          "total_count": 48254
+        },
+        {
+          "name": "田中靖規",
+          "count": 18,
+          "total_count": 18
+        },
+        {
+          "name": "花江夏树",
+          "count": 18,
+          "total_count": 739
+        },
+        {
+          "name": "瀬古浩司",
+          "count": 17,
+          "total_count": 1049
+        },
+        {
+          "name": "追番",
+          "count": 17,
+          "total_count": 2873
+        }
+      ],
+      "meta_tags": [
+        "悬疑",
+        "TV",
+        "日本",
+        "奇幻",
+        "漫画改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "25"
+        },
+        {
+          "key": "导演",
+          "value": "渡辺歩"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 1014,
+      "name": "とある魔術の禁書目録",
+      "name_cn": "魔法禁书目录",
+      "date": "2008-10-04",
+      "platform": "TV",
+      "eps": 24,
+      "rating": {
+        "score": 6.7,
+        "total": 16022
+      },
+      "collection": {
+        "on_hold": 1096,
+        "dropped": 649,
+        "wish": 1830,
+        "collect": 28213,
+        "doing": 890
+      },
+      "tags": [
+        {
+          "name": "J.C.STAFF",
+          "count": 2973,
+          "total_count": 138601
+        },
+        {
+          "name": "とある魔術の禁書目録",
+          "count": 1920,
+          "total_count": 2586
+        },
+        {
+          "name": "超能力",
+          "count": 1623,
+          "total_count": 26127
+        },
+        {
+          "name": "2008年10月",
+          "count": 1502,
+          "total_count": 8547
+        },
+        {
+          "name": "魔法禁书目录",
+          "count": 1457,
+          "total_count": 6292
+        },
+        {
+          "name": "TV",
+          "count": 1376,
+          "total_count": 1435709
+        },
+        {
+          "name": "当妈",
+          "count": 1071,
+          "total_count": 1901
+        },
+        {
+          "name": "轻小说改",
+          "count": 1022,
+          "total_count": 506845
+        },
+        {
+          "name": "战斗",
+          "count": 959,
+          "total_count": 484954
+        },
+        {
+          "name": "魔法",
+          "count": 847,
+          "total_count": 20435
+        },
+        {
+          "name": "镰池和马",
+          "count": 732,
+          "total_count": 1013
+        },
+        {
+          "name": "2008",
+          "count": 704,
+          "total_count": 36190
+        },
+        {
+          "name": "index",
+          "count": 662,
+          "total_count": 1067
+        },
+        {
+          "name": "禁书目录",
+          "count": 489,
+          "total_count": 2259
+        },
+        {
+          "name": "超电磁炮",
+          "count": 483,
+          "total_count": 6536
+        },
+        {
+          "name": "奇幻",
+          "count": 446,
+          "total_count": 487358
+        },
+        {
+          "name": "小说改",
+          "count": 383,
+          "total_count": 165945
+        },
+        {
+          "name": "后宫",
+          "count": 358,
+          "total_count": 309669
+        },
+        {
+          "name": "科幻",
+          "count": 339,
+          "total_count": 258442
+        },
+        {
+          "name": "轻改",
+          "count": 296,
+          "total_count": 154971
+        },
+        {
+          "name": "校园",
+          "count": 260,
+          "total_count": 467051
+        },
+        {
+          "name": "日本",
+          "count": 194,
+          "total_count": 309690
+        },
+        {
+          "name": "科学",
+          "count": 186,
+          "total_count": 2364
+        },
+        {
+          "name": "学园",
+          "count": 172,
+          "total_count": 460
+        },
+        {
+          "name": "热血",
+          "count": 75,
+          "total_count": 217413
+        },
+        {
+          "name": "锦织博",
+          "count": 74,
+          "total_count": 473
+        },
+        {
+          "name": "2008年",
+          "count": 50,
+          "total_count": 1962
+        },
+        {
+          "name": "錦織博",
+          "count": 50,
+          "total_count": 353
+        },
+        {
+          "name": "炮姐",
+          "count": 46,
+          "total_count": 9081
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "TV",
+        "日本",
+        "日本",
+        "奇幻",
+        "奇幻",
+        "战斗",
+        "战斗",
+        "小说改",
+        "小说改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "24"
+        },
+        {
+          "key": "导演",
+          "value": "錦織博"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 27364,
+      "name": "氷菓",
+      "name_cn": "冰菓",
+      "date": "2012-04-22",
+      "platform": "TV",
+      "eps": 22,
+      "rating": {
+        "score": 8.1,
+        "total": 33580
+      },
+      "collection": {
+        "on_hold": 3274,
+        "dropped": 1450,
+        "wish": 6517,
+        "collect": 52478,
+        "doing": 3450
+      },
+      "tags": [
+        {
+          "name": "京阿尼",
+          "count": 10719,
+          "total_count": 216521
+        },
+        {
+          "name": "校园",
+          "count": 6844,
+          "total_count": 467055
+        },
+        {
+          "name": "氷菓",
+          "count": 5960,
+          "total_count": 6178
+        },
+        {
+          "name": "青春",
+          "count": 5922,
+          "total_count": 109686
+        },
+        {
+          "name": "推理",
+          "count": 5054,
+          "total_count": 75083
+        },
+        {
+          "name": "推理系",
+          "count": 3630,
+          "total_count": 3993
+        },
+        {
+          "name": "2012年4月",
+          "count": 3264,
+          "total_count": 17553
+        },
+        {
+          "name": "TV",
+          "count": 2527,
+          "total_count": 1435721
+        },
+        {
+          "name": "小清新",
+          "count": 2216,
+          "total_count": 2421
+        },
+        {
+          "name": "2012",
+          "count": 1640,
+          "total_count": 56371
+        },
+        {
+          "name": "悬疑",
+          "count": 1483,
+          "total_count": 116060
+        },
+        {
+          "name": "小说改",
+          "count": 1208,
+          "total_count": 165948
+        },
+        {
+          "name": "京都动画",
+          "count": 1022,
+          "total_count": 33481
+        },
+        {
+          "name": "中村悠一",
+          "count": 990,
+          "total_count": 11905
+        },
+        {
+          "name": "京都",
+          "count": 873,
+          "total_count": 7711
+        },
+        {
+          "name": "温情",
+          "count": 742,
+          "total_count": 3408
+        },
+        {
+          "name": "恋爱",
+          "count": 600,
+          "total_count": 579107
+        },
+        {
+          "name": "轻小说改",
+          "count": 517,
+          "total_count": 506850
+        },
+        {
+          "name": "武本康弘",
+          "count": 507,
+          "total_count": 6442
+        },
+        {
+          "name": "日常",
+          "count": 415,
+          "total_count": 412082
+        },
+        {
+          "name": "日本",
+          "count": 374,
+          "total_count": 309691
+        },
+        {
+          "name": "轻改",
+          "count": 228,
+          "total_count": 154978
+        },
+        {
+          "name": "京都アニメーション",
+          "count": 139,
+          "total_count": 6537
+        },
+        {
+          "name": "治愈",
+          "count": 132,
+          "total_count": 307172
+        },
+        {
+          "name": "四月番",
+          "count": 118,
+          "total_count": 1867
+        },
+        {
+          "name": "神作",
+          "count": 78,
+          "total_count": 48254
+        },
+        {
+          "name": "冰菓",
+          "count": 70,
+          "total_count": 104
+        },
+        {
+          "name": "米泽穗信",
+          "count": 70,
+          "total_count": 2104
+        },
+        {
+          "name": "2012年",
+          "count": 66,
+          "total_count": 3330
+        },
+        {
+          "name": "佐藤聪美",
+          "count": 49,
+          "total_count": 329
+        }
+      ],
+      "meta_tags": [
+        "校园",
+        "TV",
+        "日本",
+        "推理",
+        "小说改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "22"
+        },
+        {
+          "key": "导演",
+          "value": "武本康弘"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 160209,
+      "name": "君の名は。",
+      "name_cn": "你的名字。",
+      "date": "2016-08-26",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 8.1,
+        "total": 35216
+      },
+      "collection": {
+        "on_hold": 210,
+        "dropped": 139,
+        "wish": 1347,
+        "collect": 59760,
+        "doing": 338
+      },
+      "tags": [
+        {
+          "name": "新海誠",
+          "count": 8332,
+          "total_count": 10711
+        },
+        {
+          "name": "剧场版",
+          "count": 7923,
+          "total_count": 734448
+        },
+        {
+          "name": "恋爱",
+          "count": 6901,
+          "total_count": 579107
+        },
+        {
+          "name": "原创",
+          "count": 3729,
+          "total_count": 632337
+        },
+        {
+          "name": "2016",
+          "count": 3632,
+          "total_count": 72085
+        },
+        {
+          "name": "新海诚",
+          "count": 3172,
+          "total_count": 35756
+        },
+        {
+          "name": "奇幻",
+          "count": 2837,
+          "total_count": 487362
+        },
+        {
+          "name": "动画电影",
+          "count": 2447,
+          "total_count": 44404
+        },
+        {
+          "name": "君の名は。",
+          "count": 1947,
+          "total_count": 1947
+        },
+        {
+          "name": "CoMixWave",
+          "count": 1485,
+          "total_count": 5063
+        },
+        {
+          "name": "君の名は",
+          "count": 785,
+          "total_count": 787
+        },
+        {
+          "name": "2016年8月",
+          "count": 776,
+          "total_count": 1127
+        },
+        {
+          "name": "你的名字。",
+          "count": 689,
+          "total_count": 690
+        },
+        {
+          "name": "日本",
+          "count": 518,
+          "total_count": 309692
+        },
+        {
+          "name": "田中将贺",
+          "count": 418,
+          "total_count": 1920
+        },
+        {
+          "name": "治愈",
+          "count": 322,
+          "total_count": 307172
+        },
+        {
+          "name": "你的名字",
+          "count": 300,
+          "total_count": 313
+        },
+        {
+          "name": "青春",
+          "count": 247,
+          "total_count": 109686
+        },
+        {
+          "name": "2016年",
+          "count": 163,
+          "total_count": 4631
+        },
+        {
+          "name": "穿越",
+          "count": 144,
+          "total_count": 65213
+        },
+        {
+          "name": "CoMixWaveFilms",
+          "count": 123,
+          "total_count": 2150
+        },
+        {
+          "name": "校园",
+          "count": 110,
+          "total_count": 467056
+        },
+        {
+          "name": "催泪",
+          "count": 103,
+          "total_count": 61210
+        },
+        {
+          "name": "电影",
+          "count": 89,
+          "total_count": 13690
+        },
+        {
+          "name": "爱情",
+          "count": 84,
+          "total_count": 13694
+        },
+        {
+          "name": "神作",
+          "count": 71,
+          "total_count": 48254
+        },
+        {
+          "name": "纯爱",
+          "count": 55,
+          "total_count": 39891
+        },
+        {
+          "name": "radwimps",
+          "count": 54,
+          "total_count": 119
+        },
+        {
+          "name": "安藤雅司",
+          "count": 48,
+          "total_count": 312
+        },
+        {
+          "name": "映画",
+          "count": 31,
+          "total_count": 6325
+        }
+      ],
+      "meta_tags": [
+        "剧场版",
+        "恋爱",
+        "日本",
+        "奇幻",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "导演",
+          "value": "新海誠"
+        },
+        {
+          "key": "话数",
+          "value": "1"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 302286,
+      "name": "BLEACH 千年血戦篇",
+      "name_cn": "死神 千年血战篇",
+      "date": "2022-10-10",
+      "platform": "TV",
+      "eps": 13,
+      "rating": {
+        "score": 7.9,
+        "total": 4877
+      },
+      "collection": {
+        "on_hold": 362,
+        "dropped": 177,
+        "wish": 2209,
+        "collect": 7616,
+        "doing": 1117
+      },
+      "tags": [
+        {
+          "name": "死神",
+          "count": 1038,
+          "total_count": 4353
+        },
+        {
+          "name": "热血",
+          "count": 827,
+          "total_count": 217415
+        },
+        {
+          "name": "2022年10月",
+          "count": 792,
+          "total_count": 36062
+        },
+        {
+          "name": "BLEACH",
+          "count": 644,
+          "total_count": 2663
+        },
+        {
+          "name": "战斗",
+          "count": 616,
+          "total_count": 484958
+        },
+        {
+          "name": "TV",
+          "count": 583,
+          "total_count": 1435721
+        },
+        {
+          "name": "漫画改",
+          "count": 522,
+          "total_count": 885640
+        },
+        {
+          "name": "漫改",
+          "count": 521,
+          "total_count": 368246
+        },
+        {
+          "name": "StudioPierrot",
+          "count": 435,
+          "total_count": 12284
+        },
+        {
+          "name": "2022",
+          "count": 343,
+          "total_count": 81469
+        },
+        {
+          "name": "JUMP",
+          "count": 324,
+          "total_count": 33640
+        },
+        {
+          "name": "奇幻",
+          "count": 232,
+          "total_count": 487359
+        },
+        {
+          "name": "爷青回",
+          "count": 210,
+          "total_count": 375
+        },
+        {
+          "name": "田口智久",
+          "count": 76,
+          "total_count": 760
+        },
+        {
+          "name": "日本",
+          "count": 61,
+          "total_count": 309691
+        },
+        {
+          "name": "日本动画",
+          "count": 49,
+          "total_count": 35887
+        },
+        {
+          "name": "久保带人",
+          "count": 27,
+          "total_count": 1446
+        },
+        {
+          "name": "续作",
+          "count": 25,
+          "total_count": 47974
+        },
+        {
+          "name": "2022年",
+          "count": 12,
+          "total_count": 3509
+        },
+        {
+          "name": "民工",
+          "count": 10,
+          "total_count": 4461
+        },
+        {
+          "name": "ぴえろ",
+          "count": 9,
+          "total_count": 1414
+        },
+        {
+          "name": "民工漫",
+          "count": 8,
+          "total_count": 218
+        },
+        {
+          "name": "TVA",
+          "count": 7,
+          "total_count": 16300
+        },
+        {
+          "name": "鹭巢诗郎",
+          "count": 6,
+          "total_count": 610
+        },
+        {
+          "name": "冒险",
+          "count": 6,
+          "total_count": 56349
+        },
+        {
+          "name": "动画",
+          "count": 6,
+          "total_count": 35783
+        },
+        {
+          "name": "久保帯人",
+          "count": 5,
+          "total_count": 490
+        },
+        {
+          "name": "续篇",
+          "count": 5,
+          "total_count": 1317
+        },
+        {
+          "name": "燃",
+          "count": 5,
+          "total_count": 16191
+        },
+        {
+          "name": "10月",
+          "count": 5,
+          "total_count": 2365
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "奇幻",
+        "漫画改",
+        "战斗"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "13"
+        },
+        {
+          "key": "导演",
+          "value": "田口智久"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 364450,
+      "name": "リコリス・リコイル",
+      "name_cn": "莉可丽丝",
+      "date": "2022-07-02",
+      "platform": "TV",
+      "eps": 13,
+      "rating": {
+        "score": 6.3,
+        "total": 20627
+      },
+      "collection": {
+        "on_hold": 1401,
+        "dropped": 1934,
+        "wish": 3503,
+        "collect": 31639,
+        "doing": 3294
+      },
+      "tags": [
+        {
+          "name": "原创",
+          "count": 5436,
+          "total_count": 632349
+        },
+        {
+          "name": "百合",
+          "count": 5369,
+          "total_count": 411557
+        },
+        {
+          "name": "A-1Pictures",
+          "count": 4369,
+          "total_count": 147768
+        },
+        {
+          "name": "战斗",
+          "count": 3460,
+          "total_count": 484987
+        },
+        {
+          "name": "2022年7月",
+          "count": 2837,
+          "total_count": 28701
+        },
+        {
+          "name": "TV",
+          "count": 2062,
+          "total_count": 1435776
+        },
+        {
+          "name": "日常",
+          "count": 2010,
+          "total_count": 412087
+        },
+        {
+          "name": "2022",
+          "count": 1351,
+          "total_count": 81471
+        },
+        {
+          "name": "足立慎吾",
+          "count": 1274,
+          "total_count": 1695
+        },
+        {
+          "name": "无法预测的命运之舞台",
+          "count": 757,
+          "total_count": 11646
+        },
+        {
+          "name": "安済知佳",
+          "count": 641,
+          "total_count": 807
+        },
+        {
+          "name": "若山詩音",
+          "count": 386,
+          "total_count": 1008
+        },
+        {
+          "name": "日本",
+          "count": 309,
+          "total_count": 309721
+        },
+        {
+          "name": "轻百合",
+          "count": 191,
+          "total_count": 39116
+        },
+        {
+          "name": "A-1_Pictures",
+          "count": 135,
+          "total_count": 1520
+        },
+        {
+          "name": "搞笑",
+          "count": 109,
+          "total_count": 653433
+        },
+        {
+          "name": "枪战",
+          "count": 61,
+          "total_count": 2351
+        },
+        {
+          "name": "烂尾",
+          "count": 52,
+          "total_count": 3545
+        },
+        {
+          "name": "科幻",
+          "count": 48,
+          "total_count": 258454
+        },
+        {
+          "name": "2022年",
+          "count": 43,
+          "total_count": 3509
+        },
+        {
+          "name": "轻bg",
+          "count": 43,
+          "total_count": 106
+        },
+        {
+          "name": "JK",
+          "count": 38,
+          "total_count": 5789
+        },
+        {
+          "name": "莉可丽丝",
+          "count": 35,
+          "total_count": 559
+        },
+        {
+          "name": "奇幻",
+          "count": 32,
+          "total_count": 487386
+        },
+        {
+          "name": "恋爱",
+          "count": 31,
+          "total_count": 579117
+        },
+        {
+          "name": "轻百",
+          "count": 29,
+          "total_count": 4182
+        },
+        {
+          "name": "日本动画",
+          "count": 23,
+          "total_count": 35887
+        },
+        {
+          "name": "枪械",
+          "count": 19,
+          "total_count": 458
+        },
+        {
+          "name": "校园",
+          "count": 18,
+          "total_count": 467061
+        },
+        {
+          "name": "冒险",
+          "count": 17,
+          "total_count": 56358
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "原创",
+        "战斗"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "13"
+        },
+        {
+          "key": "导演",
+          "value": "足立慎吾"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 373267,
+      "name": "SPY×FAMILY 第2クール",
+      "name_cn": "间谍过家家 第2部分",
+      "date": "2022-10-01",
+      "platform": "TV",
+      "eps": 13,
+      "rating": {
+        "score": 7.3,
+        "total": 14924
+      },
+      "collection": {
+        "on_hold": 911,
+        "dropped": 489,
+        "wish": 1822,
+        "collect": 26117,
+        "doing": 1921
+      },
+      "tags": [
+        {
+          "name": "搞笑",
+          "count": 3272,
+          "total_count": 653424
+        },
+        {
+          "name": "日常",
+          "count": 2697,
+          "total_count": 412079
+        },
+        {
+          "name": "2022年10月",
+          "count": 2393,
+          "total_count": 36062
+        },
+        {
+          "name": "WITSTUDIO",
+          "count": 2226,
+          "total_count": 46673
+        },
+        {
+          "name": "CloverWorks",
+          "count": 2102,
+          "total_count": 57274
+        },
+        {
+          "name": "漫画改",
+          "count": 1986,
+          "total_count": 885625
+        },
+        {
+          "name": "家庭喜剧",
+          "count": 1676,
+          "total_count": 6725
+        },
+        {
+          "name": "TV",
+          "count": 1500,
+          "total_count": 1435703
+        },
+        {
+          "name": "漫改",
+          "count": 1043,
+          "total_count": 368237
+        },
+        {
+          "name": "2022",
+          "count": 984,
+          "total_count": 81469
+        },
+        {
+          "name": "间谍过家家",
+          "count": 766,
+          "total_count": 2482
+        },
+        {
+          "name": "治愈",
+          "count": 695,
+          "total_count": 307171
+        },
+        {
+          "name": "续作",
+          "count": 264,
+          "total_count": 47970
+        },
+        {
+          "name": "古桥一浩",
+          "count": 234,
+          "total_count": 1781
+        },
+        {
+          "name": "日本",
+          "count": 225,
+          "total_count": 309690
+        },
+        {
+          "name": "战斗",
+          "count": 64,
+          "total_count": 484954
+        },
+        {
+          "name": "家庭",
+          "count": 54,
+          "total_count": 3400
+        },
+        {
+          "name": "喜剧",
+          "count": 49,
+          "total_count": 38558
+        },
+        {
+          "name": "古橋一浩",
+          "count": 43,
+          "total_count": 694
+        },
+        {
+          "name": "2022年",
+          "count": 39,
+          "total_count": 3509
+        },
+        {
+          "name": "校园",
+          "count": 38,
+          "total_count": 467051
+        },
+        {
+          "name": "早见沙织",
+          "count": 26,
+          "total_count": 6655
+        },
+        {
+          "name": "WIT_STUDIO",
+          "count": 22,
+          "total_count": 1065
+        },
+        {
+          "name": "亲情",
+          "count": 20,
+          "total_count": 5592
+        },
+        {
+          "name": "谍战",
+          "count": 17,
+          "total_count": 1039
+        },
+        {
+          "name": "萌",
+          "count": 16,
+          "total_count": 72077
+        },
+        {
+          "name": "恋爱",
+          "count": 16,
+          "total_count": 579102
+        },
+        {
+          "name": "江口拓也",
+          "count": 15,
+          "total_count": 722
+        },
+        {
+          "name": "种崎敦美",
+          "count": 14,
+          "total_count": 937
+        },
+        {
+          "name": "奇幻",
+          "count": 13,
+          "total_count": 487358
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "漫画改",
+        "日常"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "13"
+        },
+        {
+          "key": "导演",
+          "value": "古橋一浩"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 4188,
+      "name": "天使のたまご",
+      "name_cn": "天使之卵",
+      "date": "1985-12-22",
+      "platform": "OVA",
+      "eps": 1,
+      "rating": {
+        "score": 7.1,
+        "total": 1849
+      },
+      "collection": {
+        "on_hold": 112,
+        "dropped": 27,
+        "wish": 1563,
+        "collect": 2846,
+        "doing": 119
+      },
+      "tags": [
+        {
+          "name": "押井守",
+          "count": 825,
+          "total_count": 20466
+        },
+        {
+          "name": "OVA",
+          "count": 639,
+          "total_count": 370361
+        },
+        {
+          "name": "1985",
+          "count": 445,
+          "total_count": 3456
+        },
+        {
+          "name": "天野喜孝",
+          "count": 371,
+          "total_count": 1246
+        },
+        {
+          "name": "原创",
+          "count": 352,
+          "total_count": 632333
+        },
+        {
+          "name": "studiodeen",
+          "count": 318,
+          "total_count": 26967
+        },
+        {
+          "name": "剧场版",
+          "count": 267,
+          "total_count": 734446
+        },
+        {
+          "name": "宗教",
+          "count": 229,
+          "total_count": 3514
+        },
+        {
+          "name": "难解",
+          "count": 121,
+          "total_count": 122
+        },
+        {
+          "name": "哥特",
+          "count": 121,
+          "total_count": 2109
+        },
+        {
+          "name": "世界观",
+          "count": 73,
+          "total_count": 980
+        },
+        {
+          "name": "小林七郎",
+          "count": 51,
+          "total_count": 514
+        },
+        {
+          "name": "STUDIO_DEEN",
+          "count": 50,
+          "total_count": 1433
+        },
+        {
+          "name": "意识流",
+          "count": 37,
+          "total_count": 9334
+        },
+        {
+          "name": "80年代",
+          "count": 36,
+          "total_count": 2237
+        },
+        {
+          "name": "补旧番",
+          "count": 32,
+          "total_count": 5354
+        },
+        {
+          "name": "实验动画",
+          "count": 17,
+          "total_count": 2372
+        },
+        {
+          "name": "日本",
+          "count": 16,
+          "total_count": 309690
+        },
+        {
+          "name": "奇幻",
+          "count": 15,
+          "total_count": 487358
+        },
+        {
+          "name": "1985年",
+          "count": 13,
+          "total_count": 120
+        },
+        {
+          "name": "1980s",
+          "count": 13,
+          "total_count": 1100
+        },
+        {
+          "name": "菅野由弘",
+          "count": 10,
+          "total_count": 10
+        },
+        {
+          "name": "动画电影",
+          "count": 9,
+          "total_count": 44404
+        },
+        {
+          "name": "スタジオディーン",
+          "count": 9,
+          "total_count": 904
+        },
+        {
+          "name": "电影",
+          "count": 7,
+          "total_count": 13690
+        },
+        {
+          "name": "日本动画",
+          "count": 7,
+          "total_count": 35887
+        },
+        {
+          "name": "内涵",
+          "count": 6,
+          "total_count": 6886
+        },
+        {
+          "name": "名仓靖博",
+          "count": 5,
+          "total_count": 31
+        },
+        {
+          "name": "木村真二",
+          "count": 5,
+          "total_count": 175
+        },
+        {
+          "name": "实验",
+          "count": 5,
+          "total_count": 473
+        }
+      ],
+      "meta_tags": [
+        "OVA",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "1"
+        },
+        {
+          "key": "导演",
+          "value": "押井守"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 843,
+      "name": "妄想代理人",
+      "name_cn": "妄想代理人",
+      "date": "2004-02-02",
+      "platform": "TV",
+      "eps": 13,
+      "rating": {
+        "score": 8,
+        "total": 4969
+      },
+      "collection": {
+        "on_hold": 585,
+        "dropped": 114,
+        "wish": 5571,
+        "collect": 7041,
+        "doing": 624
+      },
+      "tags": [
+        {
+          "name": "今敏",
+          "count": 2106,
+          "total_count": 20718
+        },
+        {
+          "name": "MADHouse",
+          "count": 1287,
+          "total_count": 112043
+        },
+        {
+          "name": "TV",
+          "count": 940,
+          "total_count": 1435778
+        },
+        {
+          "name": "2004",
+          "count": 709,
+          "total_count": 24031
+        },
+        {
+          "name": "原创",
+          "count": 704,
+          "total_count": 632351
+        },
+        {
+          "name": "超现实",
+          "count": 694,
+          "total_count": 1927
+        },
+        {
+          "name": "妄想代理人",
+          "count": 546,
+          "total_count": 546
+        },
+        {
+          "name": "奇幻",
+          "count": 497,
+          "total_count": 487387
+        },
+        {
+          "name": "悬疑",
+          "count": 319,
+          "total_count": 116064
+        },
+        {
+          "name": "能登麻美子",
+          "count": 268,
+          "total_count": 9136
+        },
+        {
+          "name": "妄想",
+          "count": 222,
+          "total_count": 935
+        },
+        {
+          "name": "2004年2月",
+          "count": 190,
+          "total_count": 225
+        },
+        {
+          "name": "神作",
+          "count": 160,
+          "total_count": 48254
+        },
+        {
+          "name": "幻想",
+          "count": 112,
+          "total_count": 3227
+        },
+        {
+          "name": "惊悚",
+          "count": 85,
+          "total_count": 8858
+        },
+        {
+          "name": "科幻",
+          "count": 76,
+          "total_count": 258456
+        },
+        {
+          "name": "日本",
+          "count": 74,
+          "total_count": 309723
+        },
+        {
+          "name": "小众",
+          "count": 66,
+          "total_count": 79
+        },
+        {
+          "name": "烂尾",
+          "count": 40,
+          "total_count": 3545
+        },
+        {
+          "name": "2004年",
+          "count": 28,
+          "total_count": 1286
+        },
+        {
+          "name": "2004年1月",
+          "count": 23,
+          "total_count": 364
+        },
+        {
+          "name": "平沢進",
+          "count": 21,
+          "total_count": 85
+        },
+        {
+          "name": "心理",
+          "count": 21,
+          "total_count": 6515
+        },
+        {
+          "name": "安藤雅司",
+          "count": 20,
+          "total_count": 312
+        },
+        {
+          "name": "平泽进",
+          "count": 19,
+          "total_count": 248
+        },
+        {
+          "name": "补旧番",
+          "count": 18,
+          "total_count": 5354
+        },
+        {
+          "name": "剧情",
+          "count": 17,
+          "total_count": 16389
+        },
+        {
+          "name": "水上清資",
+          "count": 17,
+          "total_count": 129
+        },
+        {
+          "name": "杯具",
+          "count": 15,
+          "total_count": 166
+        },
+        {
+          "name": "动画",
+          "count": 14,
+          "total_count": 35783
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "惊悚",
+        "悬疑",
+        "TV",
+        "日本",
+        "奇幻",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "13"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 211311,
+      "name": "DEVILMAN crybaby",
+      "name_cn": "恶魔人 crybaby",
+      "date": "2018-01-05",
+      "platform": "WEB",
+      "eps": 10,
+      "rating": {
+        "score": 7.8,
+        "total": 12187
+      },
+      "collection": {
+        "on_hold": 656,
+        "dropped": 234,
+        "wish": 4690,
+        "collect": 18733,
+        "doing": 770
+      },
+      "tags": [
+        {
+          "name": "汤浅政明",
+          "count": 3100,
+          "total_count": 25983
+        },
+        {
+          "name": "Netflix",
+          "count": 1983,
+          "total_count": 22716
+        },
+        {
+          "name": "大河内一楼",
+          "count": 1803,
+          "total_count": 17522
+        },
+        {
+          "name": "猎奇",
+          "count": 1471,
+          "total_count": 37767
+        },
+        {
+          "name": "永井豪",
+          "count": 1191,
+          "total_count": 3197
+        },
+        {
+          "name": "2018年1月",
+          "count": 1136,
+          "total_count": 31797
+        },
+        {
+          "name": "漫画改",
+          "count": 1107,
+          "total_count": 885622
+        },
+        {
+          "name": "漫改",
+          "count": 984,
+          "total_count": 368237
+        },
+        {
+          "name": "TV",
+          "count": 875,
+          "total_count": 1435703
+        },
+        {
+          "name": "2018",
+          "count": 856,
+          "total_count": 79055
+        },
+        {
+          "name": "战斗",
+          "count": 782,
+          "total_count": 484952
+        },
+        {
+          "name": "ScienceSARU",
+          "count": 699,
+          "total_count": 14152
+        },
+        {
+          "name": "致郁",
+          "count": 628,
+          "total_count": 23832
+        },
+        {
+          "name": "WEB",
+          "count": 464,
+          "total_count": 73615
+        },
+        {
+          "name": "湯浅政明",
+          "count": 177,
+          "total_count": 2295
+        },
+        {
+          "name": "日本",
+          "count": 151,
+          "total_count": 309688
+        },
+        {
+          "name": "奇幻",
+          "count": 149,
+          "total_count": 487357
+        },
+        {
+          "name": "押山清高",
+          "count": 86,
+          "total_count": 2710
+        },
+        {
+          "name": "人性",
+          "count": 67,
+          "total_count": 2127
+        },
+        {
+          "name": "恶魔人",
+          "count": 67,
+          "total_count": 339
+        },
+        {
+          "name": "血腥",
+          "count": 66,
+          "total_count": 8223
+        },
+        {
+          "name": "黑暗",
+          "count": 59,
+          "total_count": 4909
+        },
+        {
+          "name": "牛尾宪辅",
+          "count": 57,
+          "total_count": 6806
+        },
+        {
+          "name": "牛尾憲輔",
+          "count": 43,
+          "total_count": 2573
+        },
+        {
+          "name": "神作",
+          "count": 37,
+          "total_count": 48254
+        },
+        {
+          "name": "暴力",
+          "count": 32,
+          "total_count": 2800
+        },
+        {
+          "name": "2018年",
+          "count": 32,
+          "total_count": 4554
+        },
+        {
+          "name": "治愈",
+          "count": 26,
+          "total_count": 307170
+        },
+        {
+          "name": "サイエンスSARU",
+          "count": 25,
+          "total_count": 472
+        },
+        {
+          "name": "剧情",
+          "count": 25,
+          "total_count": 16385
+        }
+      ],
+      "meta_tags": [
+        "日本",
+        "漫画改",
+        "战斗",
+        "WEB"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "10"
+        },
+        {
+          "key": "导演",
+          "value": "湯浅政明"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 32318,
+      "name": "しろくまカフェ",
+      "name_cn": "白熊咖啡馆",
+      "date": "2012-04-05",
+      "platform": "TV",
+      "eps": 50,
+      "rating": {
+        "score": 7.5,
+        "total": 2741
+      },
+      "collection": {
+        "on_hold": 931,
+        "dropped": 617,
+        "wish": 1264,
+        "collect": 2567,
+        "doing": 1326
+      },
+      "tags": [
+        {
+          "name": "2012年4月",
+          "count": 571,
+          "total_count": 17550
+        },
+        {
+          "name": "神谷浩史",
+          "count": 494,
+          "total_count": 30070
+        },
+        {
+          "name": "樱井孝宏",
+          "count": 462,
+          "total_count": 7899
+        },
+        {
+          "name": "治愈系",
+          "count": 435,
+          "total_count": 25377
+        },
+        {
+          "name": "福山潤",
+          "count": 431,
+          "total_count": 5233
+        },
+        {
+          "name": "冷笑话",
+          "count": 373,
+          "total_count": 864
+        },
+        {
+          "name": "动物番",
+          "count": 363,
+          "total_count": 371
+        },
+        {
+          "name": "治愈",
+          "count": 325,
+          "total_count": 307107
+        },
+        {
+          "name": "萌",
+          "count": 297,
+          "total_count": 72046
+        },
+        {
+          "name": "搞笑",
+          "count": 243,
+          "total_count": 653023
+        },
+        {
+          "name": "神卡司！",
+          "count": 219,
+          "total_count": 255
+        },
+        {
+          "name": "TV",
+          "count": 175,
+          "total_count": 1435083
+        },
+        {
+          "name": "北极熊cafe",
+          "count": 170,
+          "total_count": 170
+        },
+        {
+          "name": "中村悠一",
+          "count": 153,
+          "total_count": 11905
+        },
+        {
+          "name": "2012",
+          "count": 123,
+          "total_count": 56368
+        },
+        {
+          "name": "漫画改",
+          "count": 68,
+          "total_count": 885233
+        },
+        {
+          "name": "花泽香菜",
+          "count": 67,
+          "total_count": 43551
+        },
+        {
+          "name": "StudioPierrot",
+          "count": 52,
+          "total_count": 12282
+        },
+        {
+          "name": "日常",
+          "count": 46,
+          "total_count": 411513
+        },
+        {
+          "name": "北极熊",
+          "count": 41,
+          "total_count": 41
+        },
+        {
+          "name": "四月番",
+          "count": 34,
+          "total_count": 1867
+        },
+        {
+          "name": "福山润",
+          "count": 28,
+          "total_count": 15130
+        },
+        {
+          "name": "漫改",
+          "count": 27,
+          "total_count": 368075
+        },
+        {
+          "name": "小野大辅",
+          "count": 22,
+          "total_count": 5371
+        },
+        {
+          "name": "动物",
+          "count": 22,
+          "total_count": 6294
+        },
+        {
+          "name": "白熊咖啡厅",
+          "count": 21,
+          "total_count": 21
+        },
+        {
+          "name": "日本",
+          "count": 19,
+          "total_count": 309515
+        },
+        {
+          "name": "アニメ",
+          "count": 15,
+          "total_count": 4459
+        },
+        {
+          "name": "ぴえろ",
+          "count": 13,
+          "total_count": 1414
+        },
+        {
+          "name": "2012年",
+          "count": 13,
+          "total_count": 3330
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "漫画改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "50"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 207195,
+      "name": "ゆるキャン△",
+      "name_cn": "摇曳露营△",
+      "date": "2018-01-04",
+      "platform": "TV",
+      "eps": 12,
+      "rating": {
+        "score": 8.2,
+        "total": 17760
+      },
+      "collection": {
+        "on_hold": 1319,
+        "dropped": 285,
+        "wish": 8655,
+        "collect": 28014,
+        "doing": 3048
+      },
+      "tags": [
+        {
+          "name": "芳文社",
+          "count": 5446,
+          "total_count": 78269
+        },
+        {
+          "name": "治愈",
+          "count": 4260,
+          "total_count": 307178
+        },
+        {
+          "name": "百合",
+          "count": 3851,
+          "total_count": 411560
+        },
+        {
+          "name": "日常",
+          "count": 3239,
+          "total_count": 412087
+        },
+        {
+          "name": "2018年1月",
+          "count": 2315,
+          "total_count": 31797
+        },
+        {
+          "name": "漫画改",
+          "count": 2247,
+          "total_count": 885673
+        },
+        {
+          "name": "TV",
+          "count": 1962,
+          "total_count": 1435778
+        },
+        {
+          "name": "摇曳露营△",
+          "count": 1684,
+          "total_count": 2069
+        },
+        {
+          "name": "C-Station",
+          "count": 1475,
+          "total_count": 4072
+        },
+        {
+          "name": "露营",
+          "count": 1455,
+          "total_count": 2828
+        },
+        {
+          "name": "2018",
+          "count": 1137,
+          "total_count": 79055
+        },
+        {
+          "name": "轻百合",
+          "count": 948,
+          "total_count": 39116
+        },
+        {
+          "name": "漫改",
+          "count": 844,
+          "total_count": 368251
+        },
+        {
+          "name": "東山奈央",
+          "count": 385,
+          "total_count": 2219
+        },
+        {
+          "name": "日本",
+          "count": 233,
+          "total_count": 309723
+        },
+        {
+          "name": "高桥李依",
+          "count": 231,
+          "total_count": 2972
+        },
+        {
+          "name": "京極義昭",
+          "count": 120,
+          "total_count": 473
+        },
+        {
+          "name": "萌",
+          "count": 113,
+          "total_count": 72077
+        },
+        {
+          "name": "京极义昭",
+          "count": 91,
+          "total_count": 283
+        },
+        {
+          "name": "丰崎爱生",
+          "count": 72,
+          "total_count": 1269
+        },
+        {
+          "name": "轻百",
+          "count": 48,
+          "total_count": 4182
+        },
+        {
+          "name": "2018年",
+          "count": 45,
+          "total_count": 4554
+        },
+        {
+          "name": "校园",
+          "count": 44,
+          "total_count": 467064
+        },
+        {
+          "name": "搞笑",
+          "count": 43,
+          "total_count": 653434
+        },
+        {
+          "name": "田中仁",
+          "count": 41,
+          "total_count": 1122
+        },
+        {
+          "name": "美食",
+          "count": 39,
+          "total_count": 30251
+        },
+        {
+          "name": "摇曳露营",
+          "count": 35,
+          "total_count": 727
+        },
+        {
+          "name": "萌系",
+          "count": 35,
+          "total_count": 10005
+        },
+        {
+          "name": "科普",
+          "count": 33,
+          "total_count": 13048
+        },
+        {
+          "name": "东山奈央",
+          "count": 25,
+          "total_count": 3550
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "漫画改",
+        "日常"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "12"
+        },
+        {
+          "key": "导演",
+          "value": "京極義昭"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 90880,
+      "name": "たまこラブストーリー",
+      "name_cn": "玉子爱情故事",
+      "date": "2014-04-26",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 7.9,
+        "total": 16556
+      },
+      "collection": {
+        "on_hold": 525,
+        "dropped": 171,
+        "wish": 4424,
+        "collect": 28735,
+        "doing": 577
+      },
+      "tags": [
+        {
+          "name": "京阿尼",
+          "count": 5037,
+          "total_count": 216522
+        },
+        {
+          "name": "剧场版",
+          "count": 4774,
+          "total_count": 734453
+        },
+        {
+          "name": "恋爱",
+          "count": 4371,
+          "total_count": 579111
+        },
+        {
+          "name": "治愈",
+          "count": 2542,
+          "total_count": 307173
+        },
+        {
+          "name": "玉子市场",
+          "count": 1979,
+          "total_count": 3558
+        },
+        {
+          "name": "原创",
+          "count": 1835,
+          "total_count": 632340
+        },
+        {
+          "name": "山田尚子",
+          "count": 1821,
+          "total_count": 19587
+        },
+        {
+          "name": "2014",
+          "count": 1205,
+          "total_count": 72099
+        },
+        {
+          "name": "校园",
+          "count": 1165,
+          "total_count": 467060
+        },
+        {
+          "name": "2014年4月",
+          "count": 939,
+          "total_count": 28534
+        },
+        {
+          "name": "京都动画",
+          "count": 705,
+          "total_count": 33481
+        },
+        {
+          "name": "日常",
+          "count": 460,
+          "total_count": 412085
+        },
+        {
+          "name": "青春",
+          "count": 346,
+          "total_count": 109688
+        },
+        {
+          "name": "吉田玲子",
+          "count": 298,
+          "total_count": 7381
+        },
+        {
+          "name": "日本",
+          "count": 239,
+          "total_count": 309703
+        },
+        {
+          "name": "洲崎綾",
+          "count": 131,
+          "total_count": 256
+        },
+        {
+          "name": "京都",
+          "count": 110,
+          "total_count": 7711
+        },
+        {
+          "name": "2014年",
+          "count": 109,
+          "total_count": 4120
+        },
+        {
+          "name": "纯爱",
+          "count": 89,
+          "total_count": 39891
+        },
+        {
+          "name": "京都アニメーション",
+          "count": 82,
+          "total_count": 6537
+        },
+        {
+          "name": "萌",
+          "count": 49,
+          "total_count": 72077
+        },
+        {
+          "name": "映画",
+          "count": 44,
+          "total_count": 6325
+        },
+        {
+          "name": "动画电影",
+          "count": 32,
+          "total_count": 44404
+        },
+        {
+          "name": "堀口悠纪子",
+          "count": 25,
+          "total_count": 238
+        },
+        {
+          "name": "电影",
+          "count": 20,
+          "total_count": 13690
+        },
+        {
+          "name": "TV",
+          "count": 19,
+          "total_count": 1435739
+        },
+        {
+          "name": "青梅竹马",
+          "count": 19,
+          "total_count": 331
+        },
+        {
+          "name": "堀口悠紀子",
+          "count": 17,
+          "total_count": 1176
+        },
+        {
+          "name": "玉子爱情故事",
+          "count": 16,
+          "total_count": 17
+        },
+        {
+          "name": "续作",
+          "count": 15,
+          "total_count": 47974
+        }
+      ],
+      "meta_tags": [
+        "剧场版",
+        "校园",
+        "恋爱",
+        "日本",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "1"
+        },
+        {
+          "key": "导演",
+          "value": "山田尚子"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 839,
+      "name": "PERFECT BLUE",
+      "name_cn": "蓝色恐惧",
+      "date": "1998-02-28",
+      "platform": "剧场版",
+      "eps": 1,
+      "rating": {
+        "score": 8.7,
+        "total": 11614
+      },
+      "collection": {
+        "on_hold": 249,
+        "dropped": 102,
+        "wish": 4904,
+        "collect": 16982,
+        "doing": 342
+      },
+      "tags": [
+        {
+          "name": "今敏",
+          "count": 4211,
+          "total_count": 20718
+        },
+        {
+          "name": "剧场版",
+          "count": 2647,
+          "total_count": 734446
+        },
+        {
+          "name": "MADHouse",
+          "count": 2283,
+          "total_count": 112043
+        },
+        {
+          "name": "1998",
+          "count": 1445,
+          "total_count": 13405
+        },
+        {
+          "name": "惊悚",
+          "count": 1344,
+          "total_count": 8858
+        },
+        {
+          "name": "悬疑",
+          "count": 1342,
+          "total_count": 116060
+        },
+        {
+          "name": "未麻的部屋",
+          "count": 1212,
+          "total_count": 1213
+        },
+        {
+          "name": "虚实交错",
+          "count": 1076,
+          "total_count": 1099
+        },
+        {
+          "name": "心理",
+          "count": 1047,
+          "total_count": 6515
+        },
+        {
+          "name": "原创",
+          "count": 871,
+          "total_count": 632333
+        },
+        {
+          "name": "梦",
+          "count": 570,
+          "total_count": 1470
+        },
+        {
+          "name": "神作",
+          "count": 470,
+          "total_count": 48254
+        },
+        {
+          "name": "内涵",
+          "count": 310,
+          "total_count": 6886
+        },
+        {
+          "name": "日本",
+          "count": 173,
+          "total_count": 309690
+        },
+        {
+          "name": "90年代",
+          "count": 150,
+          "total_count": 4083
+        },
+        {
+          "name": "小说改",
+          "count": 124,
+          "total_count": 165945
+        },
+        {
+          "name": "动画电影",
+          "count": 116,
+          "total_count": 44404
+        },
+        {
+          "name": "映画",
+          "count": 75,
+          "total_count": 6325
+        },
+        {
+          "name": "偶像",
+          "count": 46,
+          "total_count": 72577
+        },
+        {
+          "name": "电影",
+          "count": 43,
+          "total_count": 13690
+        },
+        {
+          "name": "补旧番",
+          "count": 33,
+          "total_count": 5354
+        },
+        {
+          "name": "1998年",
+          "count": 31,
+          "total_count": 635
+        },
+        {
+          "name": "经典",
+          "count": 27,
+          "total_count": 23254
+        },
+        {
+          "name": "村井さだゆき",
+          "count": 26,
+          "total_count": 328
+        },
+        {
+          "name": "1998年2月",
+          "count": 24,
+          "total_count": 38
+        },
+        {
+          "name": "1990s",
+          "count": 23,
+          "total_count": 1652
+        },
+        {
+          "name": "意识流",
+          "count": 19,
+          "total_count": 9334
+        },
+        {
+          "name": "剧情",
+          "count": 16,
+          "total_count": 16385
+        },
+        {
+          "name": "动画",
+          "count": 16,
+          "total_count": 35783
+        },
+        {
+          "name": "日本动画",
+          "count": 15,
+          "total_count": 35887
+        }
+      ],
+      "meta_tags": [
+        "剧场版",
+        "惊悚",
+        "悬疑",
+        "日本",
+        "小说改"
+      ],
+      "infobox": [
+        {
+          "key": "导演",
+          "value": "今敏"
+        },
+        {
+          "key": "话数",
+          "value": "1"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 1625,
+      "name": "カイバ",
+      "name_cn": "海马",
+      "date": "2008-04-10",
+      "platform": "TV",
+      "eps": 12,
+      "rating": {
+        "score": 8,
+        "total": 2452
+      },
+      "collection": {
+        "on_hold": 344,
+        "dropped": 102,
+        "wish": 3117,
+        "collect": 3308,
+        "doing": 299
+      },
+      "tags": [
+        {
+          "name": "汤浅政明",
+          "count": 1026,
+          "total_count": 25983
+        },
+        {
+          "name": "MADHouse",
+          "count": 696,
+          "total_count": 112043
+        },
+        {
+          "name": "TV",
+          "count": 522,
+          "total_count": 1435721
+        },
+        {
+          "name": "2008",
+          "count": 430,
+          "total_count": 36190
+        },
+        {
+          "name": "原创",
+          "count": 424,
+          "total_count": 632335
+        },
+        {
+          "name": "科幻",
+          "count": 374,
+          "total_count": 258443
+        },
+        {
+          "name": "海马",
+          "count": 209,
+          "total_count": 210
+        },
+        {
+          "name": "精神猎奇",
+          "count": 197,
+          "total_count": 208
+        },
+        {
+          "name": "冷门片",
+          "count": 184,
+          "total_count": 228
+        },
+        {
+          "name": "内涵",
+          "count": 170,
+          "total_count": 6886
+        },
+        {
+          "name": "记忆",
+          "count": 110,
+          "total_count": 164
+        },
+        {
+          "name": "2008年4月",
+          "count": 108,
+          "total_count": 4365
+        },
+        {
+          "name": "湯浅政明",
+          "count": 98,
+          "total_count": 2295
+        },
+        {
+          "name": "艺术",
+          "count": 70,
+          "total_count": 1136
+        },
+        {
+          "name": "kaiba",
+          "count": 39,
+          "total_count": 39
+        },
+        {
+          "name": "日本",
+          "count": 32,
+          "total_count": 309691
+        },
+        {
+          "name": "猎奇",
+          "count": 23,
+          "total_count": 37767
+        },
+        {
+          "name": "奇幻",
+          "count": 16,
+          "total_count": 487359
+        },
+        {
+          "name": "复古",
+          "count": 15,
+          "total_count": 362
+        },
+        {
+          "name": "意识流",
+          "count": 14,
+          "total_count": 9334
+        },
+        {
+          "name": "能登麻美子",
+          "count": 12,
+          "total_count": 9136
+        },
+        {
+          "name": "公路",
+          "count": 11,
+          "total_count": 1541
+        },
+        {
+          "name": "TVA",
+          "count": 10,
+          "total_count": 16300
+        },
+        {
+          "name": "2008年",
+          "count": 10,
+          "total_count": 1962
+        },
+        {
+          "name": "桑岛法子",
+          "count": 9,
+          "total_count": 878
+        },
+        {
+          "name": "吉田潔",
+          "count": 8,
+          "total_count": 23
+        },
+        {
+          "name": "煽情",
+          "count": 8,
+          "total_count": 66
+        },
+        {
+          "name": "神作",
+          "count": 7,
+          "total_count": 48254
+        },
+        {
+          "name": "朴璐美",
+          "count": 7,
+          "total_count": 1396
+        },
+        {
+          "name": "补番",
+          "count": 6,
+          "total_count": 10547
+        }
+      ],
+      "meta_tags": [
+        "科幻",
+        "TV",
+        "日本",
+        "原创"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "12"
+        },
+        {
+          "key": "导演",
+          "value": "湯浅政明"
+        }
+      ],
+      "nsfw": false
+    },
+    {
+      "id": 93739,
+      "name": "ピンポン THE ANIMATION",
+      "name_cn": "乒乓",
+      "date": "2014-04-10",
+      "platform": "TV",
+      "eps": 11,
+      "rating": {
+        "score": 8.7,
+        "total": 17723
+      },
+      "collection": {
+        "on_hold": 1225,
+        "dropped": 358,
+        "wish": 5862,
+        "collect": 25170,
+        "doing": 1391
+      },
+      "tags": [
+        {
+          "name": "汤浅政明",
+          "count": 4643,
+          "total_count": 25983
+        },
+        {
+          "name": "乒乓",
+          "count": 3013,
+          "total_count": 3135
+        },
+        {
+          "name": "运动",
+          "count": 2868,
+          "total_count": 62205
+        },
+        {
+          "name": "漫画改",
+          "count": 2066,
+          "total_count": 885686
+        },
+        {
+          "name": "TV",
+          "count": 1997,
+          "total_count": 1435793
+        },
+        {
+          "name": "2014年4月",
+          "count": 1896,
+          "total_count": 28534
+        },
+        {
+          "name": "龙之子Production",
+          "count": 1531,
+          "total_count": 2385
+        },
+        {
+          "name": "松本大洋",
+          "count": 1513,
+          "total_count": 2082
+        },
+        {
+          "name": "热血",
+          "count": 1354,
+          "total_count": 217417
+        },
+        {
+          "name": "2014",
+          "count": 1053,
+          "total_count": 72101
+        },
+        {
+          "name": "漫改",
+          "count": 751,
+          "total_count": 368253
+        },
+        {
+          "name": "noitaminA",
+          "count": 544,
+          "total_count": 17252
+        },
+        {
+          "name": "湯浅政明",
+          "count": 338,
+          "total_count": 2295
+        },
+        {
+          "name": "日本",
+          "count": 274,
+          "total_count": 309740
+        },
+        {
+          "name": "龙之子",
+          "count": 183,
+          "total_count": 4896
+        },
+        {
+          "name": "青春",
+          "count": 139,
+          "total_count": 109691
+        },
+        {
+          "name": "神作",
+          "count": 121,
+          "total_count": 48254
+        },
+        {
+          "name": "牛尾宪辅",
+          "count": 115,
+          "total_count": 6806
+        },
+        {
+          "name": "励志",
+          "count": 108,
+          "total_count": 29028
+        },
+        {
+          "name": "人生",
+          "count": 104,
+          "total_count": 12057
+        },
+        {
+          "name": "竞技",
+          "count": 86,
+          "total_count": 13032
+        },
+        {
+          "name": "2014年",
+          "count": 47,
+          "total_count": 4120
+        },
+        {
+          "name": "群像",
+          "count": 46,
+          "total_count": 13101
+        },
+        {
+          "name": "体育",
+          "count": 45,
+          "total_count": 5075
+        },
+        {
+          "name": "タツノコプロ",
+          "count": 38,
+          "total_count": 643
+        },
+        {
+          "name": "成长",
+          "count": 36,
+          "total_count": 5690
+        },
+        {
+          "name": "校园",
+          "count": 33,
+          "total_count": 467069
+        },
+        {
+          "name": "牛尾憲輔",
+          "count": 32,
+          "total_count": 2573
+        },
+        {
+          "name": "大平晋也",
+          "count": 31,
+          "total_count": 715
+        },
+        {
+          "name": "内山昂辉",
+          "count": 29,
+          "total_count": 1524
+        }
+      ],
+      "meta_tags": [
+        "TV",
+        "日本",
+        "运动",
+        "漫画改"
+      ],
+      "infobox": [
+        {
+          "key": "话数",
+          "value": "11"
+        },
+        {
+          "key": "导演",
+          "value": "湯浅政明"
+        }
+      ],
+      "nsfw": false
+    }
+  ]
+}

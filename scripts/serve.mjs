@@ -1,3 +1,4 @@
+import { registration } from './registration.mjs';
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,7 @@ const types = {
 };
 const server = createServer(async (req, res) => {
   try {
+    if (await registration(req, res)) return;
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     const target = path.resolve(
       site,

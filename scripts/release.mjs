@@ -14,6 +14,7 @@ function walk(dir, prefix) {
   }
 }
 walk(join(root, 'dist'), 'web');
+files['registration.mjs'] = new Uint8Array(readFileSync(join(root, 'server', 'registration.mjs')));
 files['serve.mjs'] = new Uint8Array(readFileSync(join(root, 'scripts', 'serve.mjs')));
 files['START-WINDOWS.cmd'] = strToU8(
   '@echo off\r\ncd /d "%~dp0"\r\nwhere node >nul 2>nul\r\nif errorlevel 1 (\r\n  echo Please install Node.js 22 LTS or later, then run this file again.\r\n  pause\r\n  exit /b 1\r\n)\r\necho Open http://127.0.0.1:4173 in your browser.\r\nnode serve.mjs\r\npause\r\n',

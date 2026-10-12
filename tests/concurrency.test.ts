@@ -145,3 +145,59 @@ it('clicked series requests overtake waiting background requests without exceedi
   await vi.advanceTimersByTimeAsync(0);
   await Promise.all(tasks);
 });
+
+it('aborting a running radar request immediately releases its slot to normal work', async () => {
+  const api = new Api(0);
+  const controller = new AbortController();
+  const starts: string[] = [];
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((url: string, init: RequestInit) => {
+      starts.push(url);
+      if (url.endsWith('/1'))
+        return new Promise((_resolve, reject) =>
+          init.signal!.addEventListener(
+            'abort',
+            () => reject(new DOMException('abort', 'AbortError')),
+            { once: true },
+          ),
+        );
+      return Promise.resolve(new Response('{}'));
+    }),
+  );
+  const radar = api.request('GET', '/v0/subjects/1', undefined, '', -1, controller.signal);
+  const rejected = expect(radar).rejects.toMatchObject({ name: 'AbortError' });
+  await vi.waitFor(() => expect(starts).toHaveLength(1));
+  controller.abort();
+  await rejected;
+  await expect(api.request('POST', '/v0/users/-/collections/2', { type: 2 })).resolves.toEqual({});
+  expect(starts).toHaveLength(2);
+});
+it('canceled queued radar work never reaches the network and does not delay a priority write', async () => {
+  const api = new Api(0),
+    controller = new AbortController();
+  const finish: Array<() => void> = [];
+  const starts: string[] = [];
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(
+      (url: string) =>
+        new Promise<Response>((resolve) => {
+          starts.push(url);
+          finish.push(() => resolve(new Response('{}')));
+        }),
+    ),
+  );
+  const active = [1, 2, 3].map((id) => api.request('GET', '/v0/subjects/' + id));
+  await vi.waitFor(() => expect(starts).toHaveLength(3));
+  const canceled = api.request('GET', '/v0/subjects/4', undefined, '', -1, controller.signal);
+  const rejected = expect(canceled).rejects.toMatchObject({ name: 'AbortError' });
+  const normal = api.request('POST', '/v0/users/-/collections/5', { type: 2 });
+  controller.abort();
+  finish[0]();
+  await vi.waitFor(() => expect(starts).toHaveLength(4));
+  expect(starts[3]).toContain('/collections/5');
+  finish.slice(1).forEach((fn) => fn());
+  await Promise.all([...active, normal, rejected]);
+  expect(starts.some((u) => u.endsWith('/4'))).toBe(false);
+});

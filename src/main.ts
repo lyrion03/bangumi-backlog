@@ -82,6 +82,7 @@ let episodeTypes: Record<number, number> = {};
 let episodeList: Episode[] = [];
 let authBusy = false;
 let exporting = false;
+let radarJob: AbortController | null = null;
 let realtimeTimer: ReturnType<typeof setTimeout>;
 $('#app').innerHTML = shell();
 const dialog = $<HTMLDialogElement>('#dialog');
@@ -463,6 +464,7 @@ function resetFilters() {
   run(search);
 }
 function changed() {
+  stopRadar();
   renderStats();
   renderRecords();
   renderSync();
@@ -552,6 +554,7 @@ function openDialog(heading: string, content: string, wide = false) {
   dialog.scrollTop = 0;
 }
 function closeDialog() {
+  stopRadar();
   const resolve = pendingConflict;
   pendingConflict = null;
   resolve?.('cancel');
@@ -614,6 +617,60 @@ function confirmBatch(subjects: Subject[], status: Status) {
     },
     '确认标记',
   );
+}
+function stopRadar() {
+  if (!radarJob) return;
+  radarJob.abort();
+  radarJob = null;
+  const status = document.querySelector('#radar-progress');
+  if (status) status.textContent = '已停止计算，已读取的资料会保留，稍后可继续';
+  const footer = document.querySelector('#radar-footer');
+  if (footer)
+    footer.innerHTML = '<button class="button primary" data-action="radar">继续计算</button>';
+}
+async function showRadar() {
+  if (sync.progress.active || authBusy || exporting)
+    throw new Error('请等当前同步或导出完成后再计算雷达图');
+  stopRadar();
+  openDialog(
+    '图一乐雷达图',
+    '<div id="radar-content"><div class="radar-loading"><span class="radar-loading-symbol">✧</span><p id="radar-progress" role="status">正在准备你的动画记录…</p><small>仅在此窗口中计算，关闭即可停止</small></div></div><div id="radar-footer" class="dialog-footer"><button class="button secondary" data-action="radar-stop">停止计算</button></div>',
+    true,
+  );
+  const job = new AbortController();
+  radarJob = job;
+  const generation = dialogGeneration;
+  const items = structuredClone(store.all());
+  const account = user || store.state.account;
+  try {
+    const module = await import('./radar-view');
+    job.signal.throwIfAborted();
+    const result = await module.analyzeRadar({
+      api,
+      items,
+      account,
+      storage: localStorage,
+      signal: job.signal,
+      onProgress(message) {
+        if (!job.signal.aborted && generation === dialogGeneration)
+          $('#radar-progress').textContent = message;
+      },
+    });
+    if (job.signal.aborted || generation !== dialogGeneration) return;
+    $('#radar-content').innerHTML = module.radarView(result);
+    $('#radar-footer').innerHTML =
+      '<span class="muted small">仅供图一乐，不代表对个人的评价</span><button class="button secondary" data-action="radar">重新计算</button>';
+  } catch (error) {
+    if (job.signal.aborted || generation !== dialogGeneration) return;
+    $('#radar-content').innerHTML =
+      '<p class="notice">' +
+      esc(error instanceof Error ? error.message : '暂时无法生成，请稍后重试') +
+      '</p>';
+    $('#radar-footer').innerHTML =
+      '<button class="button primary" data-action="radar">继续计算</button>';
+  } finally {
+    if (radarJob === job) radarJob = null;
+  }
 }
 function renderRecords() {
   const all = store.all();
@@ -710,12 +767,14 @@ function renderProgress() {
     .forEach((b) => (b.disabled = p.active || authBusy || exporting));
 }
 sync.onProgress = () => {
+  if (sync.progress.active) stopRadar();
   renderProgress();
   renderAuth();
 };
 async function login(token: string, remember: boolean) {
   if (sync.progress.active || authBusy) throw new Error('请等待当前任务完成');
   if (!token) throw new Error('请先输入个人访问令牌');
+  stopRadar();
   authBusy = true;
   renderAuth();
   renderProgress();
@@ -929,7 +988,14 @@ function guide() {
 async function action(button: HTMLElement) {
   const id = Number(button.dataset.id);
   const status = button.dataset.status as Status;
+  if (radarJob && !['radar', 'radar-stop'].includes(button.dataset.action || '')) stopRadar();
   switch (button.dataset.action) {
+    case 'radar':
+      await showRadar();
+      break;
+    case 'radar-stop':
+      stopRadar();
+      break;
     case 'season-toggle':
       toggleQuarterMenu();
       break;

@@ -8,7 +8,7 @@
 
 ## 下载与启动
 
-1. 下载 Release 的 **Assets** 中的 `bangumi-backlog-v1.0.0.zip` 并完整解压，请勿下载 Source code。
+1. 下载 Release 的 **Assets** 中的 `bangumi-backlog-v1.1.0.zip` 并完整解压，请勿下载 Source code。
 2. 安装 [Node.js](https://nodejs.org/zh-cn/download)（22.12+ 或 24 LTS，已安装可跳过）。
 3. Windows 双击 **`START-WINDOWS.cmd`**；macOS / Linux 在解压目录运行 `node serve.mjs`。
 4. 浏览器打开 **http://127.0.0.1:4173**，使用期间保持启动窗口开启。
@@ -29,6 +29,7 @@
 - 名称、年份、季度、标签与 NSFW 筛选，热度 / 排名 / 日期排序。
 - 隐藏已整理、自动翻页、每页 10 / 20 部及系列缓存。
 - 收藏与单集进度管理，JSON 导入导出备份。
+- 我的记录 →「图一乐雷达图」，点击后生成六维动画画像。
 
 数据保存在浏览器中，请固定使用同一浏览器和地址，并定期导出备份。标记「看过」默认补齐已播正篇；「不感兴趣」仅在本地生效。
 
