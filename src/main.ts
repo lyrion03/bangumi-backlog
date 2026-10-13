@@ -48,7 +48,8 @@ import {
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!;
 const store = new Store(localStorage);
-const api = new Api();
+const CURRENT_PAGE_CONCURRENCY = 6;
+const api = new Api(350, CURRENT_PAGE_CONCURRENCY);
 const sync = new Sync(store, api);
 const seriesCache = new SeriesCache(localStorage);
 const realtimeIds = new Map<number, boolean>();
@@ -323,7 +324,7 @@ async function discoverSeries(generation: number) {
     const prepare = (subjects: Subject[], pageNumber: number, probeOnly = false) =>
       prepareSeriesPage(api, seriesCache, scope, subjects, {
         priority: pageNumber === snapshot.page ? 1 : 0,
-        concurrency: pageNumber === snapshot.page ? 3 : 1,
+        concurrency: pageNumber === snapshot.page ? CURRENT_PAGE_CONCURRENCY : 1,
         signal: job.signal,
         probeOnly,
         cancelled,
@@ -846,13 +847,14 @@ async function login(token: string, remember: boolean) {
     (remember ? localStorage : sessionStorage).setItem('bbm-token', token);
     api.token = token;
     user = me;
+    api.configureEpisodeCache(localStorage, me.id);
 
     seriesMatches.clear();
     $<HTMLInputElement>('#token').value = '';
     toast(`已连接 ${me.nickname || me.username}，正在拉取官方收藏`);
     renderAuth();
     try {
-      await sync.pull(me);
+      await sync.pull(me, false);
       toast(sync.progress.message, !!sync.progress.failed);
     } catch (error) {
       toast(`已连接，但自动拉取失败：${(error as Error).message}，可在同步中心重试`, true);
@@ -866,17 +868,24 @@ async function login(token: string, remember: boolean) {
 }
 async function exportBackup() {
   if (exporting || sync.progress.active || authBusy) throw new Error('请等待当前任务完成后导出');
+  cancelPreparation();
+  stopRadar();
   exporting = true;
   renderProgress();
   try {
     const data = store.loadError
       ? localStorage.getItem('bangumi-batch-marker-v1') || '{}'
       : JSON.stringify(
-          await createBackup(store, api, (done, total) => {
-            document.querySelectorAll<HTMLElement>('[data-action="export"]').forEach((button) => {
-              button.textContent = `正在整理单集 ${done}/${total}`;
-            });
-          }),
+          await createBackup(
+            store,
+            api,
+            (done, total) => {
+              document.querySelectorAll<HTMLElement>('[data-action="export"]').forEach((button) => {
+                button.textContent = `正在整理单集 ${done}/${total}`;
+              });
+            },
+            localStorage,
+          ),
           null,
           2,
         );
@@ -892,6 +901,7 @@ async function exportBackup() {
       button.textContent = '导出备份';
     });
     renderProgress();
+    resumePreparation();
   }
 }
 
@@ -1221,6 +1231,7 @@ async function action(button: HTMLElement) {
       if (sync.progress.active || authBusy) throw new Error('请等待当前任务完成');
       api.token = '';
       user = null;
+      api.configureEpisodeCache(localStorage, null);
 
       seriesMatches.clear();
       realtimeIds.clear();

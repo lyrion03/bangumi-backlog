@@ -194,9 +194,10 @@ export class Sync {
       this.onProgress();
     }
   }
-  async pull(user: User) {
+  async pull(user: User, refreshEpisodes = true) {
     if (!this.api.token) throw new Error('请先连接 Bangumi 账号');
     this.begin('pull', 0);
+    if (refreshEpisodes) this.api.invalidateEpisodeCache();
     let merged = 0;
     try {
       const items: Item[] = [];
@@ -227,6 +228,12 @@ export class Sync {
         this.onProgress();
         if (!page.data.length || offset >= page.total) break;
       }
+      if (!refreshEpisodes)
+        for (const item of items) {
+          const previous = this.store.get(item.id);
+          if (!previous || previous.updatedAt !== item.updatedAt || previous.status !== item.status)
+            this.api.invalidateEpisodeCache(item.id);
+        }
       const revisions = new Map(items.map((item) => [item.id, this.store.get(item.id)?.revision]));
       const conflicts: StatusConflict[] = items.flatMap((item) => {
         const local = this.store.get(item.id);

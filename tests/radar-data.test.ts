@@ -132,5 +132,9 @@ it('expires cached data and tolerates full or disabled browser storage', () => {
       throw Error('quota');
     },
   } as unknown as Storage;
-  expect(() => new RadarCache(blocked).put('a', { ok: true })).not.toThrow();
+  expect(() => {
+    const cache = new RadarCache(blocked);
+    cache.put('a', { ok: true });
+    cache.flush();
+  }).not.toThrow();
 });

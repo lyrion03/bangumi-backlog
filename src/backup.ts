@@ -7,10 +7,12 @@ export async function createBackup(
   store: Store,
   api: Api,
   progress: (done: number, total: number) => void = () => {},
+  storage?: Storage,
 ) {
   const backup = store.export();
   const token = api.token;
   if (!token) return backup;
+  if (storage) api.configureEpisodeCache(storage, backup.account.id);
   const local = new Map(store.all().map((item) => [item.id, structuredClone(item)]));
   const items = backup.items.filter((item) => item.status !== 'not_interested');
   const snapshots: Array<{ id: number; revision: number; marks: Record<string, EpisodeMark> }> = [];
@@ -19,7 +21,7 @@ export async function createBackup(
   let failure: unknown;
   progress(0, items.length);
   await Promise.all(
-    Array.from({ length: Math.min(3, items.length) }, async () => {
+    Array.from({ length: Math.min(6, items.length) }, async () => {
       while (next < items.length && !failure) {
         const item = items[next++];
         try {
@@ -60,6 +62,7 @@ export async function createBackup(
       }
     }),
   );
+  api.flushEpisodeCache();
   if (failure) throw failure;
   if (api.token !== token || store.state.owner !== backup.account.id)
     throw new Error('账号已切换，请重新导出');

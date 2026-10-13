@@ -1,3 +1,9 @@
+import {
+  EpisodeCache,
+  EPISODE_CACHE_TTL,
+  validEpisodes,
+  type EpisodeCollection,
+} from './episode-cache';
 import { quarterRange, matchesQuarter } from './season';
 import {
   normalize,
@@ -40,6 +46,43 @@ const wait = (ms: number, signal?: AbortSignal) =>
   });
 export class Api {
   token = '';
+  private episodeCache?: EpisodeCache;
+  private episodeStorage?: Storage;
+  private episodeAccount: number | null = null;
+  private episodeToken = '';
+  private episodeGeneration = 0;
+  configureEpisodeCache(storage: Storage, account: number | null) {
+    if (
+      this.episodeStorage === storage &&
+      this.episodeAccount === account &&
+      this.episodeToken === this.token
+    )
+      return;
+    this.flushEpisodeCache();
+    this.episodeStorage = storage;
+    this.episodeAccount = account;
+    this.episodeToken = this.token;
+    this.episodeCache = account && this.token ? new EpisodeCache(storage, account) : undefined;
+    this.episodeGeneration++;
+    for (const key of this.readCache.keys())
+      if (key.includes('/collections/')) this.readCache.delete(key);
+  }
+  flushEpisodeCache() {
+    this.episodeCache?.flush();
+  }
+  invalidateEpisodeCache(id?: number) {
+    this.episodeGeneration++;
+    for (const key of this.readCache.keys()) {
+      const path = JSON.parse(key)[1] as string;
+      if (
+        id === undefined
+          ? path.includes('/collections/')
+          : path === '/v0/users/-/collections/' + id + '/episodes'
+      )
+        this.readCache.delete(key);
+    }
+    this.episodeCache?.invalidate(id);
+  }
   logs: Log[] = [];
   private startQueue: Promise<void> = Promise.resolve();
   private activeRequests = 0;
@@ -91,10 +134,13 @@ export class Api {
     );
     return entry.promise;
   }
-  constructor(private gap = 350) {}
+  constructor(
+    private gap = 350,
+    private maxConcurrent = 3,
+  ) {}
   private async acquire(priority: number, path: string, token: string, signal?: AbortSignal) {
     signal?.throwIfAborted();
-    if (this.activeRequests < 3) this.activeRequests++;
+    if (this.activeRequests < this.maxConcurrent) this.activeRequests++;
     else
       await new Promise<void>((resolve, reject) => {
         const waiter = {
@@ -143,6 +189,9 @@ export class Api {
   ): Promise<T> {
     if (!path.startsWith('/v0/') || path.includes('://') || path.includes('\\'))
       return Promise.reject(new Error('仅允许 Bangumi v0 API 路径'));
+    const mutation =
+      method !== 'GET' && path.match(/^\/v0\/users\/[^/]+\/collections\/(\d+)(?:\/episodes)?$/);
+    if (mutation) this.invalidateEpisodeCache(Number(mutation[1]));
     const run = async () => {
       for (let attempt = 0; attempt < 3; attempt++) {
         signal?.throwIfAborted();
@@ -199,6 +248,7 @@ export class Api {
                     : `请求失败 (${status})：${data?.description || data?.title || data?.detail || '请稍后重试'}`;
             throw new ApiError(message, status);
           }
+          if (mutation) this.invalidateEpisodeCache(Number(mutation[1]));
           return data as T;
         } catch (error) {
           if (signal?.aborted) throw new DOMException('分析已停止', 'AbortError');
@@ -437,7 +487,10 @@ export class Api {
         priority,
         ...(signal ? [signal] : []),
       );
-      if (!page || !Array.isArray(page.data)) throw new ApiError('分页接口返回格式不受支持');
+      if (!page || !Array.isArray(page.data) || !Number.isSafeInteger(page.total) || page.total < 0)
+        throw new ApiError('分页接口返回格式不受支持');
+      if (!page.data.length && offset < page.total)
+        throw new ApiError('单集分页未读取完整，请重试');
       results.push(...page.data);
       offset += page.data.length;
       if (offset >= page.total || !page.data.length) return results;
@@ -450,13 +503,36 @@ export class Api {
       this.pages<Episode>(path, priority, this.token, signal),
     );
   }
-  episodeCollections(id: number, priority = 1, signal?: AbortSignal) {
-    return this.pages<{ episode: Episode; type: number; updated_at?: number }>(
-      `/v0/users/-/collections/${id}/episodes`,
-      priority,
-      this.token,
-      signal,
-    );
+  episodeCollections(id: number, priority = 1, signal?: AbortSignal): Promise<EpisodeCollection[]> {
+    signal?.throwIfAborted();
+    const cache = this.episodeToken === this.token ? this.episodeCache : undefined;
+    const hit = cache?.get(id);
+    if (hit !== undefined) return Promise.resolve(hit);
+    const path = '/v0/users/-/collections/' + id + '/episodes';
+    const token = this.token,
+      generation = this.episodeGeneration;
+    return this.cached<EpisodeCollection[]>(path, EPISODE_CACHE_TTL, priority, signal, async () => {
+      const rows = await this.pages<EpisodeCollection>(path, priority, token, signal);
+      signal?.throwIfAborted();
+      if (!validEpisodes(rows)) throw new ApiError('单集收藏格式无效，未生成不完整备份');
+      if (this.token !== token || this.episodeGeneration !== generation)
+        throw new DOMException('单集记录已更新，请重试', 'AbortError');
+      const compact = rows.map(({ episode: e, type, updated_at }) => ({
+        episode: {
+          id: e.id,
+          type: e.type,
+          sort: e.sort,
+          ep: e.ep,
+          airdate: e.airdate,
+          name: e.name,
+          name_cn: e.name_cn,
+        },
+        type,
+        ...(updated_at === undefined ? {} : { updated_at }),
+      }));
+      cache?.put(id, compact);
+      return compact;
+    });
   }
   collections(username: string, offset: number) {
     return this.request<Page<RemoteCollection>>(

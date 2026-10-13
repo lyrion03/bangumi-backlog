@@ -1660,12 +1660,12 @@ test('changing pages aborts old probes and prioritizes the new page over unfinis
   });
   await page.goto('/');
   await expect(page.locator('.anime-card')).toHaveCount(20);
-  await expect.poll(() => started.filter((id) => id < 71020).length).toBe(3);
+  await expect.poll(() => started.filter((id) => id < 71020).length).toBe(6);
   await page.getByRole('button', { name: '下一页', exact: true }).click();
   await expect(page.locator('.anime-card').first()).toHaveAttribute('data-id', '71020');
   await expect.poll(() => started.some((id) => id >= 71020)).toBe(true);
-  await expect.poll(() => aborted.filter((id) => id < 71020).length).toBe(3);
-  expect(started.filter((id) => id < 71020)).toHaveLength(3);
+  await expect.poll(() => aborted.filter((id) => id < 71020).length).toBe(6);
+  expect(started.filter((id) => id < 71020)).toHaveLength(6);
   release();
   await expect(page.locator('#series-scan-status')).toContainText('系列准备完成', {
     timeout: 15000,

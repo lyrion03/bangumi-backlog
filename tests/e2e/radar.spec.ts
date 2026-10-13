@@ -165,3 +165,84 @@ for (const close of ['button', 'escape', 'backdrop'])
       expect(errors).toEqual([]);
     },
   );
+
+for (const first of ['backup', 'radar'])
+  test(
+    'shared chapter snapshots work from ' +
+      first +
+      ' to the other feature and survive login after reload',
+    async ({ page }) => {
+      await setup(page);
+      let chapterReads = 0;
+      const remote = subjects.map((subject, i) => ({
+        subject,
+        subject_id: subject.id,
+        type: i === 3 ? 5 : 2,
+        updated_at: new Date(100 + i).toISOString(),
+        rate: 0,
+        comment: '',
+        private: false,
+        tags: [],
+      }));
+      await page.route('https://api.bgm.tv/v0/me', (route) =>
+        route.fulfill({ json: { id: 100, username: 'testuser', nickname: '测试用户' } }),
+      );
+      await page.route('https://api.bgm.tv/v0/users/testuser/collections?**', (route) =>
+        route.fulfill({ json: { total: remote.length, data: remote } }),
+      );
+      await page.route('https://api.bgm.tv/v0/users/-/collections/*/episodes?**', (route) => {
+        chapterReads++;
+        const id = Number(new URL(route.request().url()).pathname.split('/')[5]);
+        return route.fulfill({
+          json: {
+            total: 12,
+            data: Array.from({ length: 12 }, (_, i) => ({
+              episode: {
+                id: id * 100 + i,
+                type: 0,
+                ep: i + 1,
+                sort: i + 1,
+                airdate: '2020-01-01',
+                name: '单集',
+                name_cn: '',
+              },
+              type: 2,
+              updated_at: 1700000000,
+            })),
+          },
+        });
+      });
+      await page.evaluate(() => sessionStorage.setItem('bbm-token', 'fixture'));
+      await page.reload();
+      const ready = async () => {
+        await page.locator('nav [data-view="sync"]').click();
+        await expect(page.getByRole('button', { name: '拉取账号收藏', exact: true })).toBeEnabled();
+      };
+      const backup = async () => {
+        await ready();
+        const download = page.waitForEvent('download');
+        await page.locator('#sync [data-action="export"]').click();
+        await download;
+      };
+      const radar = async () => {
+        await page.locator('nav [data-view="records"]').click();
+        await page.getByRole('button', { name: '图一乐雷达图' }).click();
+        await expect(page.locator('.radar-axis')).toHaveCount(6, { timeout: 20000 });
+        await page.getByRole('button', { name: '关闭弹窗', exact: true }).click();
+      };
+      await ready();
+      if (first === 'backup') {
+        await backup();
+        await radar();
+      } else {
+        await radar();
+        await backup();
+      }
+      expect(chapterReads).toBe(6);
+      await page.reload();
+      await ready();
+      await backup();
+      await radar();
+      expect(chapterReads).toBe(6);
+    },
+  );

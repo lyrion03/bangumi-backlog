@@ -35,28 +35,61 @@ it('overlaps slow responses with at most three requests and spaces every start',
     expect(starts[i] - starts[i - 1]).toBeGreaterThanOrEqual(350);
   expect(Date.now() - 100000).toBeLessThan(3500);
 });
-it('429 cools all queued starts and honors Retry-After beyond fifteen seconds', async () => {
+it('six concurrent reads reduce slow-response waiting while preserving request spacing', async () => {
   vi.useFakeTimers();
   vi.setSystemTime(100000);
   const starts: number[] = [];
+  let active = 0,
+    peak = 0;
   vi.stubGlobal(
     'fetch',
     vi.fn(async () => {
       starts.push(Date.now());
-      return starts.length === 1
-        ? new Response('{}', { status: 429, headers: { 'Retry-After': '20' } })
-        : new Response('{}');
+      peak = Math.max(peak, ++active);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      active--;
+      return new Response('{}');
     }),
   );
-  const api = new Api(350);
-  const result = Promise.all([1, 2, 3, 4].map((id) => api.request('GET', '/v0/subjects/' + id)));
-  await vi.advanceTimersByTimeAsync(19999);
-  expect(starts).toHaveLength(1);
+  const api = new Api(350, 6);
+  const running = Promise.all(
+    Array.from({ length: 12 }, (_, i) => api.request('GET', '/v0/subjects/' + i)),
+  );
   await vi.runAllTimersAsync();
-  await result;
-  expect(starts).toHaveLength(5);
-  expect(starts.slice(1).every((t) => t >= 120000)).toBe(true);
+  await running;
+  expect(peak).toBe(6);
+  expect(starts).toHaveLength(12);
+  for (let i = 1; i < starts.length; i++)
+    expect(starts[i] - starts[i - 1]).toBeGreaterThanOrEqual(350);
+  expect(Date.now() - 100000).toBeLessThan(9000);
 });
+it.each([3, 6])(
+  '429 cools all queued starts at concurrency %i and honors Retry-After beyond fifteen seconds',
+  async (limit) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(100000);
+    const starts: number[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        starts.push(Date.now());
+        return starts.length === 1
+          ? new Response('{}', { status: 429, headers: { 'Retry-After': '20' } })
+          : new Response('{}');
+      }),
+    );
+    const api = new Api(350, limit);
+    const result = Promise.all(
+      Array.from({ length: limit + 1 }, (_, id) => api.request('GET', '/v0/subjects/' + id)),
+    );
+    await vi.advanceTimersByTimeAsync(19999);
+    expect(starts).toHaveLength(1);
+    await vi.runAllTimersAsync();
+    await result;
+    expect(starts).toHaveLength(limit + 2);
+    expect(starts.slice(1).every((t) => t >= 120000)).toBe(true);
+  },
+);
 function setup(count: number) {
   const storage = { getItem: () => null, setItem: () => {} } as unknown as Storage;
   const store = new Store(storage);
