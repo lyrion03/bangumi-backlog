@@ -1,0 +1,27 @@
+#pragma code_page(65001)
+1 ICON "icon.ico"
+1 24 "app.manifest"
+1 VERSIONINFO
+FILEVERSION @NUMBERS@,0
+PRODUCTVERSION @NUMBERS@,0
+FILEOS 0x40004
+FILETYPE 1
+BEGIN
+ BLOCK "StringFileInfo"
+ BEGIN
+  BLOCK "040904B0"
+  BEGIN
+   VALUE "CompanyName", "lyrion03"
+   VALUE "FileDescription", "bangumi动画补标工具"
+   VALUE "FileVersion", "@VERSION@"
+   VALUE "InternalName", "bangumi-backlog"
+   VALUE "OriginalFilename", "bangumi-backlog.exe"
+   VALUE "ProductName", "bangumi动画补标工具"
+   VALUE "ProductVersion", "@VERSION@"
+  END
+ END
+ BLOCK "VarFileInfo"
+ BEGIN
+  VALUE "Translation", 0x0409, 1200
+ END
+END

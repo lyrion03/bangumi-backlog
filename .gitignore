@@ -13,3 +13,8 @@ original-checksums.json
 .env.*
 
 /docs/DEVELOPMENT.md
+
+# Embedded Go build inputs and generated Windows resources
+launcher/web/
+launcher/app.rc
+launcher/*.syso
