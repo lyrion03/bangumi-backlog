@@ -1,3 +1,4 @@
+import { createLocalStorage } from './local-mirror';
 import { preloadPosters } from './poster-preload';
 import {
   matchesQuarter,
@@ -47,11 +48,20 @@ import {
 } from './ui';
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) =>
   document.querySelector<T>(selector)!;
-const store = new Store(localStorage);
+const dataStorage = await createLocalStorage(localStorage, (message) => toast(message, true));
+const store = new Store(dataStorage);
+if (store.loadError) dataStorage.stop();
+else if (dataStorage.getItem('bangumi-batch-marker-v1') === null) {
+  try {
+    store.settings({});
+  } catch (error) {
+    toast(error instanceof Error ? error.message : '无法初始化本地存档', true);
+  }
+}
 const CURRENT_PAGE_CONCURRENCY = 6;
 const api = new Api(350, CURRENT_PAGE_CONCURRENCY);
 const sync = new Sync(store, api);
-const seriesCache = new SeriesCache(localStorage);
+const seriesCache = new SeriesCache(dataStorage);
 const realtimeIds = new Map<number, boolean>();
 const cacheScope = () => (user ? `user-${user.id}` : 'public');
 const filteredPager = new FilteredPager();
@@ -706,7 +716,7 @@ async function showRadar() {
       api,
       items,
       account,
-      storage: localStorage,
+      storage: dataStorage,
       signal: job.signal,
       onProgress(message) {
         if (!job.signal.aborted && generation === dialogGeneration)
@@ -847,7 +857,7 @@ async function login(token: string, remember: boolean) {
     (remember ? localStorage : sessionStorage).setItem('bbm-token', token);
     api.token = token;
     user = me;
-    api.configureEpisodeCache(localStorage, me.id);
+    api.configureEpisodeCache(dataStorage, me.id);
 
     seriesMatches.clear();
     $<HTMLInputElement>('#token').value = '';
@@ -874,7 +884,7 @@ async function exportBackup() {
   renderProgress();
   try {
     const data = store.loadError
-      ? localStorage.getItem('bangumi-batch-marker-v1') || '{}'
+      ? dataStorage.getItem('bangumi-batch-marker-v1') || '{}'
       : JSON.stringify(
           await createBackup(
             store,
@@ -884,7 +894,7 @@ async function exportBackup() {
                 button.textContent = `正在整理单集 ${done}/${total}`;
               });
             },
-            localStorage,
+            dataStorage,
           ),
           null,
           2,
@@ -1231,7 +1241,7 @@ async function action(button: HTMLElement) {
       if (sync.progress.active || authBusy) throw new Error('请等待当前任务完成');
       api.token = '';
       user = null;
-      api.configureEpisodeCache(localStorage, null);
+      api.configureEpisodeCache(dataStorage, null);
 
       seriesMatches.clear();
       realtimeIds.clear();

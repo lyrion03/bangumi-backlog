@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './fixture';
 import fixtures from '../fixtures/radar-subjects.json' with { type: 'json' };
 const subjects = [51, 237, 321, 211311, 207195, 93739].map((id) =>
   fixtures.subjects.find((s) => s.id === id)!,

@@ -4,17 +4,17 @@
 
 不管你是动画老资历婆罗门，还是新入宅不久的萌新，都能使用该工具进行快速补标。找到漏标的作品，沿着系列前作、续作，一次整理你的追番记录。
 
-**[下载最新版 EXE](https://github.com/lyrion03/bangumi-backlog/releases/latest/download/bangumi-backlog.exe)** · [所有发布文件](https://github.com/lyrion03/bangumi-backlog/releases/latest)
+**[下载最新版](https://github.com/lyrion03/bangumi-backlog/releases/latest)** · [直接下载 EXE](https://github.com/lyrion03/bangumi-backlog/releases/latest/download/bangumi-backlog.exe)
 
 ## 双击即用
 
 适用于 **Windows 10 / 11 64 位（x64）**，无需安装 Node.js 或其他运行环境。
 
-1. 下载并双击 **bangumi-backlog.exe**，自动打开浏览器。
-2. 程序在系统托盘运行，不显示命令行窗口；右键图标可打开工具、进入同步中心或退出。
-3. 关闭网页后服务仍在运行，再次双击 EXE 或点击托盘图标即可返回。
+1. 下载 ZIP 并完整解压，打开同名文件夹，双击 **bangumi-backlog.exe**。
+2. 浏览器自动打开，程序在系统托盘运行，不显示命令行窗口。
+3. 右键托盘图标可打开工具、进入同步中心或退出。关闭网页后，服务仍在运行。
 
-默认地址为 **http://127.0.0.1:4173**。升级前退出旧版，继续使用同一浏览器配置和地址，原有记录与缓存仍可沿用；建议先导出 JSON 备份。重复启动只打开已有实例。端口被其他程序占用时会提示，不会自动换地址。
+文件夹内含 **README.md、bangumi-backlog.exe、data/**。也可单独下载 EXE，首次保存时会自动创建 data 文件夹，无需浏览器授权。
 
 ## 开始补标
 
@@ -32,8 +32,12 @@
 - 收藏与混合单集进度管理，JSON 导入导出备份。
 - 「图一乐雷达图」六维动画画像，与导出共享缓存，按需并发读取。
 
-数据保存在浏览器中，请定期导出备份。「看过」默认补齐已播正篇；「不感兴趣」仅本地生效。网络、令牌及 Bangumi 的访问权限要求与旧版一致。
+## 记录与缓存
 
-非官方工具，动画条目与封面来自 [Bangumi](https://bgm.tv/)。
+**浏览器数据优先**。记录、系列、导出用的单集缓存和雷达缓存有变动时，每 5 秒自动保存一份到 EXE 旁的 **data/browser-cache.json**。浏览器中缺失的数据会在启动时自动恢复，已有数据（包括空记录）不会被磁盘副本覆盖。不同账号分别保存；全新浏览器恢复最近使用的账号记录，连接 Bangumi 仍需输入令牌。令牌不写入 data。
+
+默认地址为 **http://127.0.0.1:4173**。升级前退出旧版，将新版 EXE 替换到原文件夹并保留 data，继续使用同一浏览器和地址即可。从 2.0 或更早版本升级时，首次打开会把现有浏览器记录补存到 data。复制或迁移文件夹前，保持网页打开至少 5 秒，仍建议定期导出 JSON 备份。
+
+「看过」默认补齐已播正篇；「不感兴趣」仅本地生效。非官方工具，动画条目与封面来自 [Bangumi](https://bgm.tv/)。
 
 <small><del>1.x 旧版启动：安装 Node.js 22.12+，解压发布包后 Windows 双击 START-WINDOWS.cmd，macOS / Linux 运行 node serve.mjs，再打开 http://127.0.0.1:4173 并保持命令行窗口开启。</del></small>

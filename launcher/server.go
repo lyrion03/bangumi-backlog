@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var version = "2.0.0"
+var version = "2.1.0"
 
 const appID = "bangumi-backlog"
 const profileLimit = 1024 * 1024
@@ -128,7 +128,7 @@ func writeJSON(w http.ResponseWriter, status int, value any) {
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(value)
 }
-func newHandler(site fs.FS, address string, profiles *profileReader) http.Handler {
+func newHandler(site fs.FS, address string, profiles *profileReader, data ...*localData) http.Handler {
 	files := http.FileServer(http.FS(site))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -136,6 +136,14 @@ func newHandler(site fs.FS, address string, profiles *profileReader) http.Handle
 		w.Header().Set("Cache-Control", "no-cache")
 		if r.Host != address || (r.Header.Get("Origin") != "" && r.Header.Get("Origin") != "http://"+address) || r.Header.Get("Sec-Fetch-Site") == "cross-site" {
 			http.Error(w, "Forbidden", 403)
+			return
+		}
+		if r.URL.Path == "/__backlog/data" {
+			if len(data) == 0 {
+				http.NotFound(w, r)
+				return
+			}
+			data[0].handle(w, r)
 			return
 		}
 		if strings.HasPrefix(r.URL.Path, "/__bangumi/registration/") {

@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -57,7 +58,12 @@ func launch() error {
 		return fmt.Errorf("无法启动：端口 %s 已被占用。\n\n请先退出旧版工具或占用此端口的程序，再双击启动。\n为保留原有记录，本工具不会自动更换地址。", port)
 	}
 	defer listener.Close()
-	server := &http.Server{Handler: newHandler(siteFiles(), address, newProfileReader()), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 30 * time.Second}
+	executable, err := os.Executable()
+	if err != nil {
+		return err
+	}
+	data := newLocalData(filepath.Join(filepath.Dir(executable), "data"))
+	server := &http.Server{Handler: newHandler(siteFiles(), address, newProfileReader(), data), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 30 * time.Second}
 	serveError := make(chan error, 1)
 	go func() { serveError <- server.Serve(listener) }()
 	defer func() {

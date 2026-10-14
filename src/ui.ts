@@ -89,7 +89,7 @@ export function shell() {
     <div class="sidebar-label">我的动画工作台</div>
     <nav aria-label="主导航"><button class="nav-item active" data-view="discover">${icon('grid')}发现与补标</button><button class="nav-item" data-view="records">${icon('book')}我的记录<span id="nav-count" class="nav-count">0</span></button><button class="nav-item" data-view="sync">${icon('sync')}同步中心<span id="nav-dirty" class="nav-count pink">0</span></button></nav>
     <div class="sidebar-note"><span class="note-symbol">✧</span><strong>看过的故事，值得记住。</strong><p>把散落在记忆里的动画，<br>慢慢整理成你的收藏。</p><button data-action="guide">使用小指南 ${icon('arrow')}</button></div>
-    <div class="sidebar-bottom"><button id="account-chip" class="account-chip" data-view="sync"><span class="connection-dot"></span><span class="account-copy"><span id="account-name">连接 Bangumi</span><small id="account-status">未连接 · 点击配置</small></span>${icon('chevron')}</button><small>v2.0.0 <a href="https://bgm.tv" target="_blank" rel="noopener noreferrer">Bangumi ↗</a></small></div>
+    <div class="sidebar-bottom"><button id="account-chip" class="account-chip" data-view="sync"><span class="connection-dot"></span><span class="account-copy"><span id="account-name">连接 Bangumi</span><small id="account-status">未连接 · 点击配置</small></span>${icon('chevron')}</button><small>v2.1.0 <a href="https://bgm.tv" target="_blank" rel="noopener noreferrer">Bangumi ↗</a></small></div>
   </aside>
   <div class="workspace">
     <main id="main"><section id="discover" class="view">

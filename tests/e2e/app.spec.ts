@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from './fixture';
 import fixture from './subjects.json' with { type: 'json' };
 const subjects = fixture.data;
 async function mock(

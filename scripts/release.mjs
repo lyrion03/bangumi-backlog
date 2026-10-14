@@ -13,10 +13,12 @@ execFileSync(process.execPath, [join(root, 'scripts', 'launcher-build.mjs')], {
 });
 const exe = readFileSync(join(root, 'release', 'bangumi-backlog.exe'));
 const name = 'bangumi-backlog-v' + pkg.version + '-windows-x64.zip';
+const folder = name.slice(0, -4) + '/';
 const bytes = zipSync(
   {
-    'bangumi-backlog.exe': new Uint8Array(exe),
-    'README.md': new Uint8Array(readFileSync(join(root, 'RELEASE.md'))),
+    [folder + 'bangumi-backlog.exe']: new Uint8Array(exe),
+    [folder + 'README.md']: new Uint8Array(readFileSync(join(root, 'RELEASE.md'))),
+    [folder + 'data/']: new Uint8Array(),
   },
   { level: 9 },
 );
