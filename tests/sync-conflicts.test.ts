@@ -134,3 +134,65 @@ it('manual push never overwrites a newer edit made while resolving the batch', a
   ]);
   expect(store.get(1)).toMatchObject({ status: 'dropped', dirty: true });
 });
+
+for (const choice of ['local', 'remote', 'cancel'] as const)
+  it(
+    'not-interested pull conflicts require manual removal only when keeping local: ' + choice,
+    async () => {
+      const { store, subjects, api, sync, user, request } = setup();
+      store.mark([subjects[0]], 'not_interested');
+      vi.spyOn(api, 'collections').mockResolvedValue({
+        total: 1,
+        data: [
+          {
+            subject_id: 1,
+            subject: subjects[0],
+            type: 2,
+            rate: 0,
+            comment: '',
+            private: false,
+            tags: [],
+          },
+        ],
+      });
+      sync.onConflicts = async () => choice;
+      sync.onManualUncollect = vi.fn();
+      await sync.pull(user);
+      if (choice === 'local') {
+        expect(sync.onManualUncollect).toHaveBeenCalledWith([
+          expect.objectContaining({ id: 1, status: 'not_interested' }),
+        ]);
+        expect(store.get(1)).toMatchObject({ status: 'not_interested', dirty: false });
+      } else {
+        expect(sync.onManualUncollect).not.toHaveBeenCalled();
+        expect(store.get(1)?.status).toBe(choice === 'remote' ? 'collect' : 'not_interested');
+      }
+      expect(request).not.toHaveBeenCalled();
+    },
+  );
+it('does not request manual removal for a newer edit made during a conflict', async () => {
+  const { store, subjects, api, sync, user } = setup();
+  store.mark([subjects[0]], 'not_interested');
+  vi.spyOn(api, 'collections').mockResolvedValue({
+    total: 1,
+    data: [
+      {
+        subject_id: 1,
+        subject: subjects[0],
+        type: 2,
+        rate: 0,
+        comment: '',
+        private: false,
+        tags: [],
+      },
+    ],
+  });
+  sync.onConflicts = async () => {
+    store.mark([subjects[0]], 'wish');
+    return 'local';
+  };
+  sync.onManualUncollect = vi.fn();
+  await sync.pull(user);
+  expect(sync.onManualUncollect).not.toHaveBeenCalled();
+  expect(store.get(1)?.status).toBe('wish');
+});

@@ -104,6 +104,8 @@ test('radar is click-only, renders six dimensions with tooltips, and reuses cach
     /老资历.*婆罗门.*小众.*猎奇.*完坑.*现充/,
   );
   await expect(page.locator('.radar-facts')).toContainText('2012-06-01');
+  await page.locator('.radar-help').nth(3).hover();
+  await expect(page.locator('#radar-tip-3')).toContainText('小众低分作品的涉猎');
   await page.locator('.radar-help').nth(4).hover();
   await expect(page.locator('#radar-tip-4')).toBeVisible();
   await expect(page.locator('#radar-tip-4')).toContainText('SP');

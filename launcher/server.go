@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var version = "2.1.0"
+var version = "2.1.1"
 
 const appID = "bangumi-backlog"
 const profileLimit = 1024 * 1024

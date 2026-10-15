@@ -45,6 +45,7 @@ export class Sync {
   }
   onProgress = () => {};
   onCancel = () => {};
+  onManualUncollect: (items: Item[]) => void = () => {};
   onConflicts: (items: StatusConflict[], mode: 'push' | 'pull') => Promise<ConflictChoice> =
     async () => 'cancel';
   constructor(
@@ -248,6 +249,7 @@ export class Sync {
         choice = await this.onConflicts(conflicts, 'pull');
         if (choice === 'cancel') this.cancelled = true;
       }
+      const manualUncollect: Item[] = [];
       if (!this.cancelled) {
         const conflicting = new Set(conflicts.map((c) => c.local.id));
         merged += this.store.merge(
@@ -265,12 +267,16 @@ export class Sync {
               choice === 'remote' ? conflict.remoteStatus : conflict.local.status,
               choice === 'remote',
             )
-          )
+          ) {
             merged++;
+            if (choice === 'local' && conflict.local.status === 'not_interested')
+              manualUncollect.push(conflict.local);
+          }
         }
         this.store.pulled();
       }
       this.progress.message = `${this.cancelled ? '拉取已取消，未合并本批记录' : '拉取完成'} · 处理 ${merged} 条`;
+      if (manualUncollect.length) this.onManualUncollect(manualUncollect);
     } catch (error) {
       this.progress.message = (error as Error).message;
       throw error;

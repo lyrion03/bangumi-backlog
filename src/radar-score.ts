@@ -1,10 +1,10 @@
 import { normalize, type Subject, type Item, type Episode } from './domain';
-export const RADAR_VERSION = 1;
+export const RADAR_VERSION = 2;
 export const AXES = [
   ['老资历', '注册年份基础分，加上有效观看量与跨年代阅片积累'],
   ['婆罗门', '公共口碑、作者表达与创作者覆盖；不使用个人评分'],
   ['小众', '结合年代与类型衡量站内冷门探索，新作不因人数少而加分'],
-  ['猎奇', '怪诞、身体恐怖、心理压迫等内容接触；NSFW 本身不加分'],
+  ['猎奇', '怪诞、恐怖等内容接触，以及小众低分作品的涉猎；全站评分与关注度作参考，NSFW 本身不加分'],
   ['完坑', '已完结正篇的收尾与主线系列补全；不计 SP，完结后留 30 天宽限'],
   ['现充', '现实生活、人际关系、大众易接触与温和题材取向'],
 ] as const;
@@ -165,7 +165,11 @@ const THEMES = new Set(
 const match = (m: Map<string, number>, keys: string[]) =>
   Math.max(0, ...keys.map((k) => m.get(k) || 0));
 const group = (m: Map<string, number>, groups: string[][]) => groups.map((g) => match(m, g));
-export function features(s: RadarSubject, now = Date.now()): Array<number | null> {
+export function features(
+  s: RadarSubject,
+  now = Date.now(),
+  familyNiche?: number,
+): Array<number | null> {
   const tags = strengths(s);
   const known = [...tags.values()].some((x) => x > 0);
   const art = group(tags, ART),
@@ -202,15 +206,25 @@ export function features(s: RadarSubject, now = Date.now()): Array<number | null
           : 35000) * (Number.isFinite(age) ? clamp(1 - Math.max(0, age - 15) / 60, 0.4, 1) : 1);
   const attention =
     popularity === null || popularity <= 0 ? null : clamp(Math.sqrt(popularity / scale));
-  const niche =
+  const rawNiche =
     attention === null || !Number.isFinite(age) || age < 1 ? null : (1 - attention) * 100;
-  // Neither NSFW nor low public ratings is evidence of disturbing content.
-  const weird = known
+  const niche =
+    rawNiche === null || familyNiche === undefined ? rawNiche : rawNiche * 0.3 + familyNiche * 0.7;
+  // Broader curiosity includes established, little-followed, poorly rated works.
+  // Shrink sparse public scores toward 6.5; no personal rating or extra request is needed.
+  const fringe =
+    niche !== null && s.votes !== null && s.votes >= 20 && s.score > 0
+      ? clamp((niche - 60) / 35) *
+        clamp((6.2 - (s.score * s.votes + 6.5 * 100) / (s.votes + 100)) / 2.2)
+      : 0;
+  const disturbing = known
     ? clamp(
         Math.max(odd[0], odd[1] * 0.8, odd[2] * 0.7, odd[3] * 0.55) +
           Math.max(0, odd.filter((x) => x > 0.3).length - 1) * 0.08,
-      ) * 100
-    : null;
+      )
+    : 0;
+  // Exploration is a secondary reference (up to 40 points), never a synonym for low quality.
+  const weird = known || fringe > 0 ? (disturbing + (1 - disturbing) * fringe * 0.4) * 100 : null;
   const mundane = known
     ? Math.max(real[0], real[1] * 0.8, real[2] * 0.45 * (1 - 0.6 * match(tags, ['后宫', '异世界'])))
     : null;
@@ -369,9 +383,11 @@ export function calculateRadar(
     if (scores.length) familyNiche.set(key, Math.min(...scores));
   }
   const fs = weighted.map((x) => {
-    const f = [...featureMap.get(x.n.subject.id)!];
     const family = familyNiche.get(root(x.n.subject.id));
-    if (f[1] !== null && family !== undefined) f[1] = f[1] * 0.3 + family * 0.7;
+    const f =
+      family === undefined
+        ? [...featureMap.get(x.n.subject.id)!]
+        : features(x.n.subject, now, family);
     return { ...x, f };
   });
   const values: Array<number | null> = [];

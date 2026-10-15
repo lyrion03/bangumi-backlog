@@ -249,3 +249,65 @@ describe('six-axis radar', () => {
     expect(parseRegistration('Bangumi</span><span>2025-2-31 加入</span>', now)).toBeNull();
   });
 });
+
+describe('curiosity from niche low-rated works', () => {
+  const fringe = (extra: any = {}) =>
+    node(80, 'collect', {
+      date: '2010-01-01',
+      rating: { score: 4, total: 500 },
+      collection: { collect: 600, doing: 0, wish: 0 },
+      ...extra,
+    });
+  it('adds a bounded reference only when low attention and low public score occur together', () => {
+    const low = features(fringe().subject, now)[2]!;
+    expect(low).toBeGreaterThan(15);
+    expect(low).toBeLessThanOrEqual(40);
+    expect(features(fringe({ rating: { score: 8, total: 500 } }).subject, now)[2]).toBe(0);
+    expect(features(fringe({ collection: { collect: 100000 } }).subject, now)[2]).toBe(0);
+  });
+  it('does not infer fringe exploration from new releases, unknown dates or sparse ratings', () => {
+    for (const extra of [
+      { date: '2026-09-01' },
+      { date: '' },
+      { date: '2099-01-01' },
+      { rating: { score: 1, total: 2 } },
+      { rating: { score: 0, total: 500 } },
+      { rating: { score: 4 } },
+    ])
+      expect(features(fringe(extra).subject, now)[2]).toBe(0);
+  });
+  it('can use public reception without disturbing tags or personal ratings', () => {
+    const n = fringe({ tags: [], meta_tags: [] });
+    expect(features(n.subject, now)[2]!).toBeGreaterThan(15);
+    const first = calculateRadar([n], null, 1, now);
+    n.item!.rate = 10;
+    expect(calculateRadar([n], null, 1, now).scores).toEqual(first.scores);
+    n.subject.nsfw = true;
+    expect(calculateRadar([n], null, 1, now).scores).toEqual(first.scores);
+  });
+  it('counts actual exposure, while wish and not-interested records add no exploration evidence', () => {
+    const base = collection(30);
+    const additions = Array.from({ length: 10 }, (_, i) => {
+      const n = fringe();
+      n.subject.id = 80 + i;
+      n.item!.id = 80 + i;
+      return n;
+    });
+    const initial = calculateRadar(base, null, 30, now);
+    expect(calculateRadar([...base, ...additions], null, 40, now).scores[3]!).toBeGreaterThan(
+      initial.scores[3]!,
+    );
+    for (const n of additions) n.item!.status = 'wish';
+    expect(calculateRadar([...base, ...additions], null, 40, now).scores).toEqual(initial.scores);
+    for (const n of additions) n.item!.status = 'not_interested';
+    expect(calculateRadar([...base, ...additions], null, 40, now).scores).toEqual(initial.scores);
+  });
+  it('does not treat an unpopular sequel of a mainstream franchise as a separate niche discovery', () => {
+    const sequel = fringe();
+    expect(features(sequel.subject, now, 0)[2]).toBe(0);
+    const mainstream = node(1, 'collect', { collection: { collect: 200000 } });
+    const separate = calculateRadar([mainstream, sequel], null, 2, now).scores[3]!;
+    mainstream.relations = [{ id: sequel.subject.id, type: 2, relation: '续集' }];
+    expect(calculateRadar([mainstream, sequel], null, 2, now).scores[3]!).toBeLessThan(separate);
+  });
+});

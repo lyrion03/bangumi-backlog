@@ -127,7 +127,7 @@ test('detail editor preserves typed text during asynchronous loads and sync uses
       body: { episode_id: [501], type: 2 },
     },
   ]);
-  expect(await page.evaluate(() => localStorage.getItem('bbm-token'))).toBeNull();
+  expect(await page.evaluate(() => localStorage.getItem('bbm-token'))).toBe('fixture-only-token');
 });
 test('search errors can be retried and local records stay available', async ({ page }) => {
   await mock(page, { searchError: true });
@@ -1671,3 +1671,170 @@ test('changing pages aborts old probes and prioritizes the new page over unfinis
     timeout: 15000,
   });
 });
+
+for (const remember of [true, false])
+  test(
+    'connection remembers tokens by default and supports session-only: ' + remember,
+    async ({ page }) => {
+      await mock(page);
+      await page.goto('/#sync');
+      await expect(page.locator('#remember')).toBeChecked();
+      if (!remember) await page.locator('#remember').uncheck();
+      await page.locator('#token').fill('fixture-only-token');
+      await page.getByRole('button', { name: '验证并连接' }).click();
+      await expect(page.locator('#account-name')).toHaveText('测试用户');
+      const saved = await page.evaluate(() => ({
+        local: localStorage.getItem('bbm-token'),
+        session: sessionStorage.getItem('bbm-token'),
+      }));
+      expect(saved).toEqual(
+        remember
+          ? { local: 'fixture-only-token', session: null }
+          : { local: null, session: 'fixture-only-token' },
+      );
+      await page.reload();
+      await expect(page.locator('#account-name')).toHaveText('测试用户');
+      expect(await page.evaluate(() => localStorage.getItem('bbm-token'))).toBe(
+        remember ? 'fixture-only-token' : null,
+      );
+    },
+  );
+for (const error of ['network', 'unauthorized'])
+  test('token verification failure displays an actionable modal: ' + error, async ({ page }) => {
+    await mock(page);
+    await page.route('https://api.bgm.tv/v0/me', (route) =>
+      error === 'network' ? route.abort('failed') : route.fulfill({ status: 401, json: {} }),
+    );
+    await page.goto('/#sync');
+    await page.locator('#token').fill('fixture-invalid-token');
+    await page.getByRole('button', { name: '验证并连接' }).click();
+    const modal = page.getByRole('dialog');
+    await expect(modal).toBeVisible();
+    await expect(modal.locator('#dialog-title')).toHaveText('验证并连接失败');
+    await expect(modal.getByRole('alert')).toContainText(
+      error === 'network' ? '网络连接与代理设置' : '令牌有效期与账号权限',
+    );
+    await expect(modal).toContainText('科学上网');
+    expect(await page.evaluate(() => localStorage.getItem('bbm-token'))).toBeNull();
+    if (error === 'network') {
+      await page.setViewportSize({ width: 390, height: 844 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
+        false,
+      );
+      await page.screenshot({ path: 'qa/v2.1.1-network-dialog.png' });
+    }
+    await modal.getByRole('button', { name: '返回同步中心' }).click();
+    await expect(modal).not.toBeVisible();
+    await expect(page.locator('#connect')).toBeEnabled();
+    await expect(page.locator('#token')).toHaveValue('fixture-invalid-token');
+  });
+test('automatic pull failure keeps the verified connection and offers retry in sync', async ({
+  page,
+}) => {
+  await mock(page);
+  let failed = true;
+  await page.route('https://api.bgm.tv/v0/users/testuser/collections?**', (route) =>
+    route.fulfill({
+      status: failed ? 503 : 200,
+      json: failed ? { title: 'offline' } : { data: [], total: 0 },
+    }),
+  );
+  await page.goto('/#sync');
+  await page.locator('#token').fill('fixture-only-token');
+  await page.getByRole('button', { name: '验证并连接' }).click();
+  await expect(page.locator('#dialog-title')).toHaveText('已连接，但收藏同步失败');
+  await expect(page.getByRole('dialog')).toContainText('连接状态已保留');
+  await expect(page.locator('#account-name')).toHaveText('测试用户');
+  failed = false;
+  await page.getByRole('button', { name: '返回同步中心' }).click();
+  await page.getByRole('button', { name: '拉取账号收藏', exact: true }).click();
+  await expect(page.locator('#sync-progress')).toContainText('拉取完成');
+  await expect(page.getByRole('dialog')).not.toBeVisible();
+});
+for (const choice of ['local', 'remote', 'cancel'])
+  test(
+    'not-interested conflicts link to manual cloud removal only after local choice: ' + choice,
+    async ({ page }) => {
+      const writes: unknown[] = [];
+      await mock(page, { writes });
+      await page.addInitScript(
+        (rows) => {
+          sessionStorage.setItem('bbm-token', 'fixture-token');
+          localStorage.setItem(
+            'bangumi-batch-marker-v1',
+            JSON.stringify({
+              version: 1,
+              preferencesVersion: 2,
+              owner: 100,
+              items: Object.fromEntries(
+                rows.map((s) => [
+                  s.id,
+                  { ...s, status: 'not_interested', dirty: false, revision: 1 },
+                ]),
+              ),
+              settings: { realtime: false, completeEpisodes: false, autoNext: false },
+            }),
+          );
+        },
+        subjects.slice(0, 2),
+      );
+      await page.route('https://api.bgm.tv/v0/users/testuser/collections?**', (route) =>
+        route.fulfill({
+          json: {
+            total: 2,
+            data: subjects
+              .slice(0, 2)
+              .map((subject) => ({
+                subject_id: subject.id,
+                subject,
+                type: 2,
+                rate: 0,
+                comment: '',
+                private: false,
+                tags: [],
+              })),
+          },
+        }),
+      );
+      await page.goto('/#sync');
+      await expect(page.locator('.manual-uncollect-note')).toContainText('手动前往 Bangumi');
+      await page
+        .getByRole('button', {
+          name:
+            choice === 'local'
+              ? '全部保留本地状态'
+              : choice === 'remote'
+                ? '全部采用云端状态'
+                : '取消本次同步',
+          exact: true,
+        })
+        .click();
+      if (choice === 'local') {
+        await expect(page.locator('#dialog-title')).toHaveText('本地已保留，云端收藏需手动取消');
+        await expect(page.locator('.manual-uncollect-list li')).toHaveCount(2);
+        for (const subject of subjects.slice(0, 2))
+          await expect(
+            page.locator(
+              '.manual-uncollect-list a[href="https://bgm.tv/subject/' + subject.id + '"]',
+            ),
+          ).toHaveAttribute('target', '_blank');
+        await page.setViewportSize({ width: 390, height: 844 });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
+          false,
+        );
+        await page.screenshot({ path: 'qa/v2.1.1-manual-uncollect.png' });
+        await page.getByRole('button', { name: '我知道了' }).click();
+        await expect(page.locator('#pending-total')).toHaveText('0');
+      } else await expect(page.getByRole('dialog')).not.toBeVisible();
+      const statuses = await page.evaluate(() =>
+        Object.values(JSON.parse(localStorage.getItem('bangumi-batch-marker-v1')!).items).map(
+          (i: any) => i.status,
+        ),
+      );
+      expect(statuses).toEqual([
+        choice === 'remote' ? 'collect' : 'not_interested',
+        choice === 'remote' ? 'collect' : 'not_interested',
+      ]);
+      expect(writes).toHaveLength(0);
+    },
+  );

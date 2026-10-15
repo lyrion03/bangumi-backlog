@@ -3543,3 +3543,51 @@ dialog::backdrop {
     gap: 8px;
   }
 }
+
+.sync-alert {
+  margin: 18px 0;
+  padding: 20px;
+  border: 1px solid #ec9b8b;
+  border-left: 5px solid #c34e36;
+  border-radius: 12px;
+  background: #fff3ee;
+  color: #823322;
+}
+.sync-alert strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.sync-alert p {
+  margin: 10px 0 0;
+  line-height: 1.8;
+}
+.connection-error-detail {
+  color: var(--muted);
+  margin: 18px 0;
+  overflow-wrap: anywhere;
+}
+.connection-error-detail summary {
+  cursor: pointer;
+}
+.manual-uncollect-list {
+  list-style: none;
+  padding: 0;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.manual-uncollect-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.manual-uncollect-list li span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.manual-uncollect-list a {
+  flex-shrink: 0;
+}

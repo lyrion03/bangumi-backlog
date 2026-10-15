@@ -14,7 +14,7 @@ import { FilteredPager } from './filtered-pager';
 import { updateYearRange } from './year-range';
 import { TAG_GROUPS } from './tags';
 import './style.css';
-import { Api } from './api';
+import { Api, ApiError } from './api';
 import { Store } from './store';
 import { Sync, type ConflictChoice } from './sync';
 import { collectSeries } from './series';
@@ -592,11 +592,30 @@ sync.onConflicts = (conflicts, mode) =>
   new Promise<ConflictChoice>((resolve) => {
     openDialog(
       '收藏状态冲突',
-      `<p class="dialog-description">${mode === 'pull' ? '拉取' : '推送'}前发现 ${conflicts.length} 部作品的状态不同。以下选择统一应用于本批全部冲突；未同步的评分、短评和单集编辑仍会保留。${mode === 'pull' ? '保留本地的状态将列为待同步，不在本次拉取中写入云端。' : '采用云端状态的冲突条目本次不推送。'} </p><div class="conflict-list"><table><thead><tr><th>作品</th><th>本地状态</th><th>云端状态</th></tr></thead><tbody>${conflicts.map((c) => `<tr><td>${esc(title(c.local))}<small>#${c.local.id}</small></td><td>${esc(STATUS[c.local.status].label)}</td><td>${esc(STATUS[c.remoteStatus].label)}</td></tr>`).join('')}</tbody></table></div><div class="dialog-footer"><button class="text-button" data-action="close">取消本次同步</button><button class="button secondary" data-action="sync-choice" data-choice="remote">全部采用云端状态</button><button class="button primary" data-action="sync-choice" data-choice="local">全部保留本地状态</button></div>`,
+      `<p class="dialog-description">${mode === 'pull' ? '拉取' : '推送'}前发现 ${conflicts.length} 部作品的状态不同。以下选择统一应用于本批全部冲突；未同步的评分、短评和单集编辑仍会保留。${mode === 'pull' ? '保留本地的可同步状态将列为待同步，不在本次拉取中写入云端。' : '采用云端状态的冲突条目本次不推送。'} </p>${conflicts.some((c) => c.local.status === 'not_interested') ? '<p class="notice manual-uncollect-note">「不感兴趣」仅本地生效。保留本地后，需要你手动前往 Bangumi 取消对应作品的收藏；工具不会自动取消云端收藏。</p>' : ''}<div class="conflict-list"><table><thead><tr><th>作品</th><th>本地状态</th><th>云端状态</th></tr></thead><tbody>${conflicts.map((c) => `<tr><td>${esc(title(c.local))}<small>#${c.local.id}</small></td><td>${esc(STATUS[c.local.status].label)}</td><td>${esc(STATUS[c.remoteStatus].label)}</td></tr>`).join('')}</tbody></table></div><div class="dialog-footer"><button class="text-button" data-action="close">取消本次同步</button><button class="button secondary" data-action="sync-choice" data-choice="remote">全部采用云端状态</button><button class="button primary" data-action="sync-choice" data-choice="local">全部保留本地状态</button></div>`,
       true,
     );
     pendingConflict = resolve;
   });
+sync.onManualUncollect = (items) => {
+  openDialog(
+    '本地已保留，云端收藏需手动取消',
+    '<div class="sync-alert" role="alert"><strong>「不感兴趣」仅在本地生效</strong><p>以下作品在 Bangumi 仍有收藏记录。请逐个打开作品页面，手动取消收藏。工具不会自动执行取消操作。</p></div>' +
+      '<ul class="manual-uncollect-list">' +
+      items
+        .map(
+          (item) =>
+            '<li><span>' +
+            esc(title(item)) +
+            '</span><a class="button secondary compact" href="https://bgm.tv/subject/' +
+            item.id +
+            '" target="_blank" rel="noopener noreferrer">前往 Bangumi ↗</a></li>',
+        )
+        .join('') +
+      '</ul>' +
+      '<div class="dialog-footer"><button class="button primary" data-action="close">我知道了</button></div>',
+  );
+};
 sync.onCancel = () => {
   if (pendingConflict) closeDialog();
 };
@@ -841,6 +860,29 @@ sync.onProgress = () => {
   renderProgress();
   renderAuth();
 };
+function connectionFailure(error: unknown, connected = false) {
+  const message = error instanceof Error ? error.message : '请求未能完成';
+  const permission = error instanceof ApiError && [401, 403].includes(error.status);
+  openDialog(
+    connected ? '已连接，但收藏同步失败' : '验证并连接失败',
+    '<div class="sync-alert" role="alert"><strong>' +
+      (permission
+        ? '请检查令牌有效期与账号权限'
+        : error instanceof ApiError
+          ? '请先检查网络连接与代理设置'
+          : '未能完成账号连接') +
+      '</strong><p>检查科学上网是否正常，确认当前浏览器能访问 Bangumi 及其 API，再回到同步中心重试。</p></div>' +
+      '<p class="dialog-description">' +
+      (connected
+        ? '令牌已验证，连接状态已保留。网络恢复后点击「拉取账号收藏」重试。'
+        : '未能完成连接。请根据错误详情检查网络、令牌或本地账号记录，再重试。') +
+      '</p>' +
+      '<details class="connection-error-detail"><summary>查看错误详情</summary><p>' +
+      esc(message) +
+      '</p></details>' +
+      '<div class="dialog-footer"><button class="button primary" data-action="auth-return">返回同步中心</button></div>',
+  );
+}
 async function login(token: string, remember: boolean) {
   if (sync.progress.active || authBusy) throw new Error('请等待当前任务完成');
   if (!token) throw new Error('请先输入个人访问令牌');
@@ -867,8 +909,10 @@ async function login(token: string, remember: boolean) {
       await sync.pull(me, false);
       toast(sync.progress.message, !!sync.progress.failed);
     } catch (error) {
-      toast(`已连接，但自动拉取失败：${(error as Error).message}，可在同步中心重试`, true);
+      connectionFailure(error, true);
     }
+  } catch (error) {
+    connectionFailure(error);
   } finally {
     authBusy = false;
     renderAuth();
@@ -1251,6 +1295,11 @@ async function action(button: HTMLElement) {
       sessionStorage.removeItem('bbm-token');
       renderAuth();
       toast('已断开连接，本地记录已保留');
+      break;
+    case 'auth-return':
+      closeDialog();
+      showView('sync');
+      (user ? $('[data-action="pull"]') : $('#token')).focus();
       break;
     case 'sync-choice': {
       const resolve = pendingConflict;
